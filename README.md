@@ -3,6 +3,7 @@ RateMyMusic je aplikacija za diskusiju, ocenjivanje i pisanje recenzija o muzica
 
 # Funkcionalnosti
 Glavna funkcionalnost ove aplikacije je pregled i ocenjivanje muzicara, pesama i albuma.
+Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takodje mogu da diskutuju tudje recenzije preko komentara.
 
 ### Neregistrovani korisnik
 - Pregleda i pretrage muzicara, pesama i albuma.
@@ -12,7 +13,9 @@ Glavna funkcionalnost ove aplikacije je pregled i ocenjivanje muzicara, pesama i
 - Pregleda i pretrage muzicara, pesama i albuma.
 - Ocenjivanje muzicara, albuma i pesama.
 - Pisanje recenzija za muzicara, albuma i pesama.
+- Pisanje komentara na druge recenezije
 - Kreiranja kolekcija pesama, albuma i muzicara
+- Pregled profila i profila drugih registrovanih korisnika
 
 ### Moderatori
 - CRUD operacije nad muzicarima, albumima i pesmama.
