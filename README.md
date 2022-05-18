@@ -15,19 +15,22 @@ Glavna funkcionalnost ove aplikacije je pregled i ocenjivanje muzicara, pesama i
 - Pisanje recenzija za muzicara, albuma i pesama.
 - Kreiranja kolekcija pesama, albuma i muzicara
 
-
 ### Moderatori
 - CRUD operacije nad muzicarima, albumima i pesmama.
 - CRUD operacije nad korisnickim ocenama i recenzijama
 
-
 ### Administrator
 - CRUD operacije nad registrovanim korisnicima
-- 
+- Izvestaji o korisnicima
+
 # Arhitektura sistema
-* Korisnički mirkoservis - Go
-* Mikroservis za rukovanje repozitorijumima - Go
+* Korisnički mirkoservis - Za rukuvanje korisnicima - Go, PostgreSQL 
+* Mikroservis za rukovanje muzicarima repozitorijumima - Go, PostgreSQL 
+* Mikroservis za rukovanje pesmama repozitorijumima - Go, PostgreSQL 
+* Mikroservis za rukovanje albumima repozitorijumima - Go,PostgreSQL 
+* Mikroservis za rukovanje recenzijama i ocenama - Go,PostgreSQL 
 * Email mikroservis - Go ili Python
 * Veb interfejs - TypeScript, Angular
 
-Moguca prosirenja u vidu rule-based sistema ili machine learning systema za predlaganje novih muzicara, albuma i pesmama registrovanim korisnicima na osnovu njihovih prethodnih aktivnosti
+Moguca prosirenja:
+- rule-based ili machine learning sistem za predlaganje novih muzicara, albuma i pesmama registrovanim korisnicima na osnovu njihovih prethodnih aktivnosti
