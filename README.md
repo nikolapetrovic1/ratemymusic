@@ -17,8 +17,7 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 - Kreiranja kolekcija pesama, albuma i muzicara
 - Pregled profila i profila drugih registrovanih korisnika
 - Mogućnost prijave neprikladnog komentara.
-## Prosirenje za diplomski rad:
-- Slusanje pesma i albuma preko postojecih streaming platformi.
+
 
 ### Moderatori
 - CRUD operacije nad muzicarima, albumima i pesmama.
@@ -37,7 +36,9 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 * Mikroservis za rukovanje albumima repozitorijumima - Go,PostgreSQL 
 * Email mikroservis - Go ili Python
 * Mikroservis za rukovanje recenzijama i ocenama - Rust,PostgreSQL 
-* Mikroservis za komunikaciju sa streaming plaformama za slusanje muzike - Go ili Python
+* Mikroservis za komunikaciju sa streaming plaformama (Soundcloud ili Spotify) za slusanje muzike - Go ili Python
 * Veb interfejs - TypeScript, Angular
 
+## Prosirenje za diplomski rad:
+- Slusanje pesma i albuma preko postojecih streaming platformi.
 
