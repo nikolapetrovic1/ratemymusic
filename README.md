@@ -16,6 +16,9 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 - Pisanje komentara na druge recenezije
 - Kreiranja kolekcija pesama, albuma i muzicara
 - Pregled profila i profila drugih registrovanih korisnika
+- Mogućnost prijave neprikladnog komentara.
+Prosirenje za diplomski rad:
+- Slusanje pesma i albuma preko postojecih streaming platformi.
 
 ### Moderatori
 - CRUD operacije nad muzicarima, albumima i pesmama.
@@ -24,15 +27,17 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 ### Administrator
 - CRUD operacije nad registrovanim korisnicima
 - Izvestaji o korisnicima
+- Mogućnost banovanja korisnika čiji su komentari prijavljeni kao neprikladni.
 
 # Arhitektura sistema
+* API gateway - Tehnologija: Go
 * Korisnički mirkoservis - Za rukuvanje korisnicima - Go, PostgreSQL 
 * Mikroservis za rukovanje muzicarima repozitorijumima - Go, PostgreSQL 
 * Mikroservis za rukovanje pesmama repozitorijumima - Go, PostgreSQL 
 * Mikroservis za rukovanje albumima repozitorijumima - Go,PostgreSQL 
-* Mikroservis za rukovanje recenzijama i ocenama - Go,PostgreSQL 
 * Email mikroservis - Go ili Python
+* Mikroservis za rukovanje recenzijama i ocenama - Rust,PostgreSQL 
+* Mikroservis za komunikaciju sa streaming plaformama za slusanje muzike - Go ili Python
 * Veb interfejs - TypeScript, Angular
 
-Moguca prosirenja:
-- rule-based ili machine learning sistem za predlaganje novih muzicara, albuma i pesmama registrovanim korisnicima na osnovu njihovih prethodnih aktivnosti
+
