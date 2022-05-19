@@ -17,7 +17,7 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 - Kreiranja kolekcija pesama, albuma i muzicara
 - Pregled profila i profila drugih registrovanih korisnika
 - Mogućnost prijave neprikladnog komentara.
-Prosirenje za diplomski rad:
+## Prosirenje za diplomski rad:
 - Slusanje pesma i albuma preko postojecih streaming platformi.
 
 ### Moderatori
