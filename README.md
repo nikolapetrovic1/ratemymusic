@@ -38,6 +38,7 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 * Mikroservis za rukovanje recenzijama i ocenama - Rust,PostgreSQL 
 * Mikroservis za rukovanje komentarima - Go,PostgreSQL 
 * Mikroservis za komunikaciju sa streaming plaformama (Soundcloud ili Spotify) za slusanje muzike - Go ili Python
+* Mikroservis za upload muzickih fajlova (mp3) - Go
 * Veb interfejs - TypeScript, Angular
 
 ## Prosirenje za diplomski rad:
