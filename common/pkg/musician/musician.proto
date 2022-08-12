@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package auth;
+
+option go_package = "./pkg/pb";
+
+service MusicianService {
+  rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
+//  rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
+//  rpc CreateSong(SongRequest) returns (CreateSongResponse){}
+//  rpc UpdateSong(SongRequest) returns (CreateSongResponse){}
+//  rpc DeleteSong(DeleteSongRequest) returns (CreateSongResponse){}
+}
+message SongData{
+  int64 id = 1;
+  string name = 2;
+  int32 duration = 3;
+  int64 musicianID = 4;
+}
+message MusicianData{
+  int64 id = 1;
+  string musician_name= 2;
+  string name = 3;
+  string surname = 4;
+  repeated SongData songs = 5;
+}
+message FindOneRequest { int64 id = 1; }
+
+message FindOneResponse{
+  int64 status = 1;
+  string error = 2;
+  MusicianData data = 3;
+}

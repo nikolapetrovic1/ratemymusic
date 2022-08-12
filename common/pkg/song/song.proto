@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package song;
+
+option go_package = "./pkg/pb";
+
+
+service SongService{
+  rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
+  rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
+  rpc CreateSong(SongRequest) returns (CreateSongResponse){}
+  rpc UpdateSong(SongRequest) returns (CreateSongResponse){}
+  rpc DeleteSong(DeleteSongRequest) returns (CreateSongResponse){}
+}
+
+
+//CREATE
+message SongRequest{
+  int64 id = 1;
+  string name = 2;
+  int32 duration = 3;
+  int64 musicianID = 4;
+}
+
+message CreateSongResponse{
+  int64 status = 1;
+  string error = 2;
+}
+//DELETE
+message DeleteSongRequest {
+  int64 id = 1;
+}
+//FindAllByMusician
+
+message SongResponse{
+  int64 id = 1;
+  string name = 2;
+  int32 duration = 3;
+}
+
+message FindByMusicianRequest{
+  int64 id = 1;
+}
+
+message FindByMusicianResponse{
+  int64 id = 1;
+  int64 status = 2;
+  string error = 3;
+  repeated SongResponse songs = 4;
+}
+
+// FindOne
+message FindOneData {
+  int64 id = 1;
+  string name = 2;
+}
+
+message FindOneRequest { int64 id = 1; }
+
+message FindOneResponse{
+
+  int64 status = 1;
+  string error = 2;
+  FindOneData data = 3;
+}
+
