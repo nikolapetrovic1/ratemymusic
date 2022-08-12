@@ -3,31 +3,32 @@ package routes
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
+	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/musician"
 	"net/http"
 )
 
-type SongUpdateBody struct {
-	Id         int64  `json:"id"`
-	Name       string `json:"name"`
-	Duration   int32  `json:"duration"`
-	MusicianID int64  `json:"musician_id"`
+type MusicianUpdateBody struct {
+	ID           int64  `json:"id"`
+	MusicianName string `json:"musician_name"`
+	Name         string `json:"name"`
+	Surname      string `json:"surname"`
 }
 
-func Update(ctx *gin.Context, c pb.SongServiceClient) {
+func Update(ctx *gin.Context, c pb.MusicianServiceClient) {
 
-	songRequest := SongUpdateBody{}
+	musicianData := MusicianUpdateBody{}
 
-	if err := ctx.BindJSON(&songRequest); err != nil {
+	if err := ctx.BindJSON(&musicianData); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := c.UpdateSong(context.Background(), &pb.SongRequest{
-		Id:         songRequest.Id,
-		Name:       songRequest.Name,
-		Duration:   songRequest.Duration,
-		MusicianID: songRequest.MusicianID,
+	res, err := c.UpdateMusician(context.Background(), &pb.MusicianData{
+		Id:           musicianData.ID,
+		MusicianName: musicianData.MusicianName,
+		Name:         musicianData.Name,
+		Surname:      musicianData.Surname,
+		Songs:        nil,
 	})
 
 	if err != nil {

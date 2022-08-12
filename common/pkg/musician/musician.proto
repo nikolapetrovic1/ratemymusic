@@ -6,10 +6,9 @@ option go_package = "./pkg/pb";
 
 service MusicianService {
   rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
-//  rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
-//  rpc CreateSong(SongRequest) returns (CreateSongResponse){}
-//  rpc UpdateSong(SongRequest) returns (CreateSongResponse){}
-//  rpc DeleteSong(DeleteSongRequest) returns (CreateSongResponse){}
+  rpc CreateMusician(MusicianData) returns (FindOneResponse){}
+  rpc UpdateMusician(MusicianData) returns (FindOneResponse){}
+  rpc DeleteMusician(DeleteRequest) returns (DeleteResponse){}
 }
 message SongData{
   int64 id = 1;
@@ -19,7 +18,7 @@ message SongData{
 }
 message MusicianData{
   int64 id = 1;
-  string musician_name= 2;
+  string musician_name = 2;
   string name = 3;
   string surname = 4;
   repeated SongData songs = 5;
@@ -30,4 +29,11 @@ message FindOneResponse{
   int64 status = 1;
   string error = 2;
   MusicianData data = 3;
+}
+
+message DeleteRequest { int64 id = 1; }
+
+message DeleteResponse {
+  int64 status = 1;
+  string error = 2;
 }

@@ -3,12 +3,12 @@ package routes
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
+	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/musician"
 	"net/http"
 	"strconv"
 )
 
-func Delete(ctx *gin.Context, c pb.SongServiceClient) {
+func Delete(ctx *gin.Context, c pb.MusicianServiceClient) {
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 
 	if err != nil {
@@ -16,7 +16,7 @@ func Delete(ctx *gin.Context, c pb.SongServiceClient) {
 		return
 	}
 
-	res, err := c.DeleteSong(context.Background(), &pb.DeleteSongRequest{
+	res, err := c.DeleteMusician(context.Background(), &pb.DeleteRequest{
 		Id: id,
 	})
 

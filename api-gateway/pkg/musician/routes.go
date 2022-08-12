@@ -17,28 +17,22 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes := r.Group("/musician")
 	routes.Use(a.AuthRequired)
 	routes.GET("/:id", svc.FindOne)
-	//routes.GET("/musician/:id", svc.FindByMusician)
-	//routes.POST("/", svc.CreateSong)
-	//routes.PUT("/", svc.UpdateSong)
-	//routes.DELETE("/:id", svc.DeleteSong)
+	routes.POST("/", svc.Create)
+	routes.PUT("/", svc.Update)
+	routes.DELETE("/:id", svc.Delete)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
 	routes.FindOne(ctx, svc.Client)
 }
 
-//
-//func (svc *ServiceClient) FindByMusician(ctx *gin.Context) {
-//	routes.FindByMusician(ctx, svc.Client)
-//}
-//
-//func (svc *ServiceClient) CreateSong(ctx *gin.Context) {
-//	routes.Create(ctx, svc.Client)
-//}
-//
-//func (svc *ServiceClient) UpdateSong(ctx *gin.Context) {
-//	routes.Update(ctx, svc.Client)
-//}
-//func (svc *ServiceClient) DeleteSong(ctx *gin.Context) {
-//	routes.Delete(ctx, svc.Client)
-//}
+func (svc *ServiceClient) Create(ctx *gin.Context) {
+	routes.Create(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) Update(ctx *gin.Context) {
+	routes.Update(ctx, svc.Client)
+}
+func (svc *ServiceClient) Delete(ctx *gin.Context) {
+	routes.Delete(ctx, svc.Client)
+}

@@ -3,29 +3,32 @@ package routes
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
+	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/musician"
 	"net/http"
 )
 
-type SongRequestBody struct {
-	Name       string `json:"name"`
-	Duration   int32  `json:"duration"`
-	MusicianID int64  `json:"musician_id"`
+type MusicianCreateBody struct {
+	ID           int64  `json:"id"`
+	MusicianName string `json:"musician_name"`
+	Name         string `json:"name"`
+	Surname      string `json:"surname"`
 }
 
-func Create(ctx *gin.Context, c pb.SongServiceClient) {
+func Create(ctx *gin.Context, c pb.MusicianServiceClient) {
 
-	songRequest := SongRequestBody{}
+	musicianData := MusicianCreateBody{}
 
-	if err := ctx.BindJSON(&songRequest); err != nil {
+	if err := ctx.BindJSON(&musicianData); err != nil {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
-	res, err := c.CreateSong(context.Background(), &pb.SongRequest{
-		Name:       songRequest.Name,
-		Duration:   songRequest.Duration,
-		MusicianID: songRequest.MusicianID,
+	res, err := c.CreateMusician(context.Background(), &pb.MusicianData{
+		Id:           0,
+		MusicianName: musicianData.MusicianName,
+		Name:         musicianData.Name,
+		Surname:      musicianData.Surname,
+		Songs:        nil,
 	})
 
 	if err != nil {

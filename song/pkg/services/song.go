@@ -8,6 +8,7 @@ import (
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/db"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/models"
 	"net/http"
+	"strconv"
 )
 
 type Server struct {
@@ -43,6 +44,7 @@ func (s *Server) FindByMusician(context context.Context, request *pb.FindByMusic
 	if err != nil {
 		return &pb.FindByMusicianResponse{
 			Status: http.StatusNotFound,
+			Error:  "Musician with ID:" + strconv.FormatInt(request.Id, 10) + " not found",
 		}, nil
 	}
 	var songs []models.Song
