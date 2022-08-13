@@ -37,7 +37,9 @@ message LoginResponse {
 
 // Validate
 
-message ValidateRequest { string token = 1; }
+message ValidateRequest { string token = 1;
+  repeated string roles = 2;
+}
 
 message ValidateResponse {
   int64 status = 1;

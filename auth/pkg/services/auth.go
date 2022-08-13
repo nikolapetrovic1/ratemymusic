@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	"github.com/nikolapetrovic1/ratemymusic/auth/pkg/db"
 	"github.com/nikolapetrovic1/ratemymusic/auth/pkg/models"
 	"github.com/nikolapetrovic1/ratemymusic/auth/pkg/utils"
@@ -81,8 +82,26 @@ func (s *Server) Validate(_ context.Context, req *pb.ValidateRequest) (*pb.Valid
 		}, nil
 	}
 
+	err = s.CheckRoles(req, claims.Role)
+	if err != nil {
+		return &pb.ValidateResponse{
+			Status: http.StatusNotFound,
+			Error:  "user does not have needed role",
+		}, nil
+	}
 	return &pb.ValidateResponse{
 		Status: http.StatusOK,
 		UserId: user.Id,
 	}, nil
+}
+
+func (s *Server) CheckRoles(req *pb.ValidateRequest, userRole string) error {
+
+	for _, role := range req.Roles {
+		if role == userRole {
+			return nil
+		}
+	}
+	return errors.New("user does not have needed role")
+
 }

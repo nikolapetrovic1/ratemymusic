@@ -8,14 +8,13 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient) {
-	a := auth.InitAuthMiddleware(authSvc)
+	//a := auth.InitAuthMiddleware(authSvc)
 
 	svc := &ServiceClient{
 		Client: InitServiceClient(c),
 	}
 
 	routes := r.Group("/musician")
-	routes.Use(a.AuthRequired)
 	routes.GET("/:id", svc.FindOne)
 	routes.POST("/", svc.Create)
 	routes.PUT("/", svc.Update)

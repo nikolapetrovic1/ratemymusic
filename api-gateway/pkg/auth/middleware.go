@@ -16,7 +16,7 @@ func InitAuthMiddleware(svc *ServiceClient) AuthMiddlewareConfig {
 	return AuthMiddlewareConfig{svc}
 }
 
-func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
+func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context, allowedRole []string) {
 	authorization := ctx.Request.Header.Get("authorization")
 
 	if authorization == "" {
@@ -33,6 +33,7 @@ func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context) {
 
 	res, err := c.svc.Client.Validate(context.Background(), &pb.ValidateRequest{
 		Token: token[1],
+		Roles: allowedRole,
 	})
 
 	if err != nil || res.Status != http.StatusOK {
