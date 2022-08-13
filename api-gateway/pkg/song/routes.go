@@ -15,12 +15,13 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	}
 
 	routes := r.Group("/song")
-	routes.Use(a.AuthRequired)
-	routes.GET("/:id", svc.FindOne)
+	//routes.Use(a.AuthRequired)
+	routes.GET("/:id", a.AuthRequired, svc.FindOne)
 	routes.GET("/musician/:id", svc.FindByMusician)
-	routes.POST("/", svc.CreateSong)
-	routes.PUT("/", svc.UpdateSong)
-	routes.DELETE("/:id", svc.DeleteSong)
+	routes.GET("/search", svc.Search)
+	routes.POST("/", a.AuthRequired, svc.CreateSong)
+	routes.PUT("/", a.AuthRequired, svc.UpdateSong)
+	routes.DELETE("/:id", a.AuthRequired, svc.DeleteSong)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
@@ -40,4 +41,7 @@ func (svc *ServiceClient) UpdateSong(ctx *gin.Context) {
 }
 func (svc *ServiceClient) DeleteSong(ctx *gin.Context) {
 	routes.Delete(ctx, svc.Client)
+}
+func (svc *ServiceClient) Search(ctx *gin.Context) {
+	routes.Search(ctx, svc.Client)
 }

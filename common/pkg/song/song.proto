@@ -11,6 +11,7 @@ service SongService{
   rpc CreateSong(SongRequest) returns (CreateSongResponse){}
   rpc UpdateSong(SongRequest) returns (CreateSongResponse){}
   rpc DeleteSong(DeleteSongRequest) returns (CreateSongResponse){}
+  rpc SearchSong(SearchRequest) returns (FindAllResponse) {}
 }
 
 
@@ -64,3 +65,11 @@ message FindOneResponse{
   FindOneData data = 3;
 }
 
+message FindAllResponse{
+  int64 status = 1;
+  string error = 2;
+  repeated SongResponse songs = 3;
+}
+message SearchRequest{
+  string query = 1;
+}

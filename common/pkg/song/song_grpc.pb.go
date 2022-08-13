@@ -27,6 +27,7 @@ type SongServiceClient interface {
 	CreateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
 	UpdateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
 	DeleteSong(ctx context.Context, in *DeleteSongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
+	SearchSong(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*FindAllResponse, error)
 }
 
 type songServiceClient struct {
@@ -82,6 +83,15 @@ func (c *songServiceClient) DeleteSong(ctx context.Context, in *DeleteSongReques
 	return out, nil
 }
 
+func (c *songServiceClient) SearchSong(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*FindAllResponse, error) {
+	out := new(FindAllResponse)
+	err := c.cc.Invoke(ctx, "/song.SongService/SearchSong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // SongServiceServer is the server API for SongService service.
 // All implementations must embed UnimplementedSongServiceServer
 // for forward compatibility
@@ -91,6 +101,7 @@ type SongServiceServer interface {
 	CreateSong(context.Context, *SongRequest) (*CreateSongResponse, error)
 	UpdateSong(context.Context, *SongRequest) (*CreateSongResponse, error)
 	DeleteSong(context.Context, *DeleteSongRequest) (*CreateSongResponse, error)
+	SearchSong(context.Context, *SearchRequest) (*FindAllResponse, error)
 	mustEmbedUnimplementedSongServiceServer()
 }
 
@@ -112,6 +123,9 @@ func (UnimplementedSongServiceServer) UpdateSong(context.Context, *SongRequest) 
 }
 func (UnimplementedSongServiceServer) DeleteSong(context.Context, *DeleteSongRequest) (*CreateSongResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteSong not implemented")
+}
+func (UnimplementedSongServiceServer) SearchSong(context.Context, *SearchRequest) (*FindAllResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchSong not implemented")
 }
 func (UnimplementedSongServiceServer) mustEmbedUnimplementedSongServiceServer() {}
 
@@ -216,6 +230,24 @@ func _SongService_DeleteSong_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SongService_SearchSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SongServiceServer).SearchSong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/song.SongService/SearchSong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SongServiceServer).SearchSong(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // SongService_ServiceDesc is the grpc.ServiceDesc for SongService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -242,6 +274,10 @@ var SongService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteSong",
 			Handler:    _SongService_DeleteSong_Handler,
+		},
+		{
+			MethodName: "SearchSong",
+			Handler:    _SongService_SearchSong_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

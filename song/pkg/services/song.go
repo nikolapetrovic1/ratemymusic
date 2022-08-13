@@ -86,6 +86,13 @@ func (s *Server) DeleteSong(context context.Context, deleteRequest *pb.DeleteSon
 	}, nil
 }
 
+func (s *Server) SearchSong(context context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
+	return &pb.FindAllResponse{
+		Status: http.StatusOK,
+		Songs:  mapListSongResponse(s.Repo.SearchSongs(request.Query)),
+	}, nil
+}
+
 func mapListSongResponse(songs []models.Song) []*pb.SongResponse {
 	var songResponse []*pb.SongResponse
 	for _, song := range songs {
@@ -93,6 +100,7 @@ func mapListSongResponse(songs []models.Song) []*pb.SongResponse {
 	}
 	return songResponse
 }
+
 func mapSongResponse(song models.Song) *pb.SongResponse {
 	return &pb.SongResponse{Id: song.ID, Name: song.Name, Duration: int32(song.Duration)}
 }
