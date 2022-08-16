@@ -15,4 +15,5 @@ type Song struct {
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+	AlbumID   uint           `json:"album_id"`
 }

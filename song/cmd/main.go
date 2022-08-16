@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	pb1 "github.com/nikolapetrovic1/ratemymusic/common/pkg/album"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
 	"github.com/nikolapetrovic1/ratemymusic/song/client"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/config"
@@ -37,7 +38,10 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	pb.RegisterSongServiceServer(grpcServer, &s)
-
+	pb1.RegisterAlbumServiceServer(grpcServer, &services.AlbumServer{
+		Repo:        h,
+		MusicianSvc: musicianSvc,
+	})
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalln("Failed to serve:", err)
 	}

@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package album;
+
+option go_package = "./pkg/pb";
+
+
+
+service AlbumService{
+  rpc FindOne(IDRequest) returns (BasicResponse) {}
+  rpc FindByMusician(FindByMusicianRequest) returns (BasicResponse) {}
+  rpc CreateAlbum(AlbumData) returns (BasicResponse){}
+  rpc UpdateAlbum(AlbumData) returns (BasicResponse){}
+  rpc DeleteAlbum(IDRequest) returns (DeleteResponse){}
+  rpc SearchAlbum(SearchRequest) returns (FindAllResponse) {}
+}
+
+
+message IDRequest { int64 id = 1; }
+
+message DeleteResponse {
+  int64 status = 1;
+  string error = 2;
+}
+message BasicResponse{
+  int64 status = 1;
+  string error = 2;
+  AlbumData data = 3;
+}
+message SongData{
+  int64 id = 1;
+  string name = 2;
+  int32 duration = 3;
+  int64 musicianID = 4;
+}
+
+message AlbumData{
+  int64 id = 1;
+  string name = 2;
+  int64 musicianID = 4;
+}
+message SearchRequest{
+  string query = 1;
+}
+
+message FindAllResponse{
+  int64 status = 1;
+  string error = 2;
+  repeated AlbumData songs = 3;
+}
+
+message FindByMusicianRequest{
+  int64 id = 1;
+}

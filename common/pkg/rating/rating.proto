@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package rating;
+
+option go_package = "./pkg/pb";
+
+
+service RatingService {
+  rpc FindByUser(IdRequest) returns (RatingResponse) {}
+  rpc FindBySong(IdRequest) returns (RatingResponse){}
+  rpc FindByAlbum(IdRequest) returns (RatingResponse){}
+  rpc RateSong(RateRequest) returns (RateResponse){}
+  rpc RateAlbum(RateRequest) returns (RateResponse){}
+}
+message RateRequest{
+  float rating_value = 1;
+  int64 user_id = 2;
+  oneof rating_type{
+    int64 albumId = 3;
+    int64 songId = 4;
+  }
+}
+message RateResponse {
+  int64 status = 1;
+  string error = 2;
+}
+message IdRequest {
+  int64 id = 1;
+}
+message RatingResponse{
+  int64 status = 1;
+  string error = 2;
+  repeated RatingData rating_data = 3;
+}
+message RatingData{
+  float rating_value = 1;
+  int64 user_id = 2;
+  oneof rating_type{
+    int64 albumId = 3;
+    int64 songId = 4;
+  }
+}

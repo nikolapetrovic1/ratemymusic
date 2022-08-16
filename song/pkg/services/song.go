@@ -7,6 +7,7 @@ import (
 	"github.com/nikolapetrovic1/ratemymusic/song/client"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/db"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/models"
+	"github.com/nikolapetrovic1/ratemymusic/song/pkg/utils"
 	"net/http"
 	"strconv"
 )
@@ -57,13 +58,13 @@ func (s *Server) FindByMusician(context context.Context, request *pb.FindByMusic
 	fmt.Println(songs)
 	return &pb.FindByMusicianResponse{
 		Status: http.StatusOK,
-		Songs:  mapListSongResponse(songs),
+		Songs:  utils.MapListSongResponse(songs),
 		Id:     request.Id,
 	}, nil
 }
 
 func (s *Server) CreateSong(context context.Context, songRequest *pb.SongRequest) (*pb.CreateSongResponse, error) {
-	s.Repo.DB.Create(mapSongRequestSong(songRequest))
+	s.Repo.DB.Create(utils.MapSongRequestSong(songRequest))
 
 	return &pb.CreateSongResponse{
 		Status: http.StatusCreated,
@@ -71,7 +72,7 @@ func (s *Server) CreateSong(context context.Context, songRequest *pb.SongRequest
 }
 
 func (s *Server) UpdateSong(context context.Context, songRequest *pb.SongRequest) (*pb.CreateSongResponse, error) {
-	s.Repo.DB.Save(mapSongRequestSong(songRequest))
+	s.Repo.DB.Save(utils.MapSongRequestSong(songRequest))
 
 	return &pb.CreateSongResponse{
 		Status: http.StatusCreated,
@@ -89,27 +90,6 @@ func (s *Server) DeleteSong(context context.Context, deleteRequest *pb.DeleteSon
 func (s *Server) SearchSong(context context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
 	return &pb.FindAllResponse{
 		Status: http.StatusOK,
-		Songs:  mapListSongResponse(s.Repo.SearchSongs(request.Query)),
+		Songs:  utils.MapListSongResponse(s.Repo.SearchSongs(request.Query)),
 	}, nil
-}
-
-func mapListSongResponse(songs []models.Song) []*pb.SongResponse {
-	var songResponse []*pb.SongResponse
-	for _, song := range songs {
-		songResponse = append(songResponse, mapSongResponse(song))
-	}
-	return songResponse
-}
-
-func mapSongResponse(song models.Song) *pb.SongResponse {
-	return &pb.SongResponse{Id: song.ID, Name: song.Name, Duration: int32(song.Duration)}
-}
-
-func mapSongRequestSong(songRequest *pb.SongRequest) *models.Song {
-	return &models.Song{
-		ID:         songRequest.Id,
-		Name:       songRequest.Name,
-		Duration:   int(songRequest.Duration),
-		MusicianID: songRequest.MusicianID,
-	}
 }

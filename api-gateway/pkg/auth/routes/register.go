@@ -23,6 +23,7 @@ func Register(ctx *gin.Context, c pb.AuthServiceClient) {
 	res, err := c.Register(context.Background(), &pb.RegisterRequest{
 		Email:    b.Email,
 		Password: b.Password,
+		Role:     "USER",
 	})
 
 	if err != nil {
