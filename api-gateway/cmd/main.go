@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/auth"
+	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/comment"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/config"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/musician"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/rating"
@@ -24,6 +25,7 @@ func main() {
 	song.RegisterRoutes(r, &c, &authSvc)
 	musician.RegisterRoutes(r, &c, &authSvc)
 	rating.RegisterRoutes(r, &c, &authSvc)
+	comment.RegisterRoutes(r, &c, &authSvc)
 	err = r.Run(c.Port)
 	if err != nil {
 		return
