@@ -1,4 +1,4 @@
-use comment::comment_client::CommentClient;
+use comment::comments_client::CommentsClient;
 use comment::CommentRequest;
 
 pub mod comment {
@@ -6,7 +6,7 @@ pub mod comment {
 }
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut client = CommentClient::connect("http://[::1]:50055").await?;
+    let mut client = CommentsClient::connect("http://[::1]:50055").await?;
 
     let request = tonic::Request::new(
         CommentRequest { comment: String::from("Test"), user_id: 1, review_id: 1 }

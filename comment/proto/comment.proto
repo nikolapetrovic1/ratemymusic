@@ -4,15 +4,14 @@ package comment;
 
 option go_package = "./pkg/pb";
 
-service Comment{
+service Comments{
     rpc CreateComment(CommentRequest) returns (CommentResponse) {};
-
 }
 
 message CommentRequest {
     string comment = 1;
-    int64 userId = 2;
-    int64 reviewId = 3;
+    int32 userId = 2;
+    int32 reviewId = 3;
 }
 
 message CommentResponse {

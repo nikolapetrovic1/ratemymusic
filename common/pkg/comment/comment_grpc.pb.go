@@ -18,86 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// CommentClient is the client API for Comment service.
+// CommentsClient is the client API for Comments service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type CommentClient interface {
+type CommentsClient interface {
 	CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
 }
 
-type commentClient struct {
+type commentsClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewCommentClient(cc grpc.ClientConnInterface) CommentClient {
-	return &commentClient{cc}
+func NewCommentsClient(cc grpc.ClientConnInterface) CommentsClient {
+	return &commentsClient{cc}
 }
 
-func (c *commentClient) CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+func (c *commentsClient) CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
 	out := new(CommentResponse)
-	err := c.cc.Invoke(ctx, "/comment.Comment/CreateComment", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/comment.Comments/CreateComment", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// CommentServer is the server API for Comment service.
-// All implementations must embed UnimplementedCommentServer
+// CommentsServer is the server API for Comments service.
+// All implementations must embed UnimplementedCommentsServer
 // for forward compatibility
-type CommentServer interface {
+type CommentsServer interface {
 	CreateComment(context.Context, *CommentRequest) (*CommentResponse, error)
-	mustEmbedUnimplementedCommentServer()
+	mustEmbedUnimplementedCommentsServer()
 }
 
-// UnimplementedCommentServer must be embedded to have forward compatible implementations.
-type UnimplementedCommentServer struct {
+// UnimplementedCommentsServer must be embedded to have forward compatible implementations.
+type UnimplementedCommentsServer struct {
 }
 
-func (UnimplementedCommentServer) CreateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
+func (UnimplementedCommentsServer) CreateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
 }
-func (UnimplementedCommentServer) mustEmbedUnimplementedCommentServer() {}
+func (UnimplementedCommentsServer) mustEmbedUnimplementedCommentsServer() {}
 
-// UnsafeCommentServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to CommentServer will
+// UnsafeCommentsServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to CommentsServer will
 // result in compilation errors.
-type UnsafeCommentServer interface {
-	mustEmbedUnimplementedCommentServer()
+type UnsafeCommentsServer interface {
+	mustEmbedUnimplementedCommentsServer()
 }
 
-func RegisterCommentServer(s grpc.ServiceRegistrar, srv CommentServer) {
-	s.RegisterService(&Comment_ServiceDesc, srv)
+func RegisterCommentsServer(s grpc.ServiceRegistrar, srv CommentsServer) {
+	s.RegisterService(&Comments_ServiceDesc, srv)
 }
 
-func _Comment_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Comments_CreateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CommentRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CommentServer).CreateComment(ctx, in)
+		return srv.(CommentsServer).CreateComment(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/comment.Comment/CreateComment",
+		FullMethod: "/comment.Comments/CreateComment",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CommentServer).CreateComment(ctx, req.(*CommentRequest))
+		return srv.(CommentsServer).CreateComment(ctx, req.(*CommentRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Comment_ServiceDesc is the grpc.ServiceDesc for Comment service.
+// Comments_ServiceDesc is the grpc.ServiceDesc for Comments service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Comment_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "comment.Comment",
-	HandlerType: (*CommentServer)(nil),
+var Comments_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "comment.Comments",
+	HandlerType: (*CommentsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "CreateComment",
-			Handler:    _Comment_CreateComment_Handler,
+			Handler:    _Comments_CreateComment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

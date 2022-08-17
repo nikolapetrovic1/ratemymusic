@@ -10,11 +10,11 @@ import (
 type CommentBody struct {
 	ID       int64  `json:"id"`
 	Comment  string `json:"comment"`
-	UserId   int64  `json:"user_id"`
-	ReviewId int64  `json:"review_id"`
+	UserId   int32  `json:"user_id"`
+	ReviewId int32  `json:"review_id"`
 }
 
-func Create(ctx *gin.Context, c pb.CommentClient) {
+func Create(ctx *gin.Context, c pb.CommentsClient) {
 
 	comment := CommentBody{}
 
