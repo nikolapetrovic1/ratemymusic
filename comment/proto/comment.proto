@@ -19,8 +19,8 @@ message AllCommentsResponse{
 message CommentRequest {
     int32 id = 1;
     string comment = 2;
-    int32 userId = 3;
-    int32 reviewId = 4;
+    int32 user_id = 3;
+    int32 review_id = 4;
 }
 
 message CommentResponse {
