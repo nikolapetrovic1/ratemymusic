@@ -2,18 +2,13 @@ package services
 
 import (
 	"context"
+	"fmt"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/rating"
 	"github.com/nikolapetrovic1/ratemymusic/rating/pkg/db"
 	"github.com/nikolapetrovic1/ratemymusic/rating/pkg/models"
 	"github.com/nikolapetrovic1/ratemymusic/song/client"
 	"net/http"
 )
-
-//FindByUser(context.Context, *IdRequest) (*RatingResponse, error)
-//FindBySong(context.Context, *IdRequest) (*RatingResponse, error)
-//FindByAlbum(context.Context, *IdRequest) (*RatingResponse, error)
-//RateSong(context.Context, *RateRequest) (*RateResponse, error)
-//RateAlbum(context.Context, *RateRequest) (*RateResponse, error)
 
 type Server struct {
 	pb.UnimplementedRatingServiceServer
@@ -72,49 +67,49 @@ func (s Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*pb
 		RatingData: mapListAlbumRatingRatingData(albumRatings),
 	}, nil
 }
+func (s Server) RateSong(context context.Context, request *pb.RateRequest) (*pb.RateResponse, error) {
+	_, err := s.FindReviewByUserSong(request.UserId, request.GetSongId())
+	if err == nil {
+		s.Repo.DB.Save(mapRatingDataRatingSong(request))
+		return &pb.RateResponse{
+			Status: http.StatusOK,
+		}, nil
+	}
+	s.Repo.DB.Create(mapRatingDataRatingSong(request))
 
-func mapListRatingRatingData(ratingsSong []models.SongRating, ratingsAlbum []models.AlbumRating) []*pb.RatingData {
-	var ratingDatas []*pb.RatingData
-	for _, rating := range ratingsSong {
-		ratingDatas = append(ratingDatas, mapSongRatingRatingData(&rating))
-	}
-	for _, rating := range ratingsAlbum {
-		ratingDatas = append(ratingDatas, mapAlbumRatingRatingData(&rating))
-	}
-	return ratingDatas
-}
-func mapListSongRatingRatingData(ratingsSong []models.SongRating) []*pb.RatingData {
-	var ratingDatas []*pb.RatingData
-
-	for _, rating := range ratingsSong {
-		ratingDatas = append(ratingDatas, mapSongRatingRatingData(&rating))
-	}
-	return ratingDatas
+	return &pb.RateResponse{
+		Status: http.StatusOK,
+	}, nil
 }
 
-func mapListAlbumRatingRatingData(ratingsAlbum []models.AlbumRating) []*pb.RatingData {
-	var ratingDatas []*pb.RatingData
+func (s Server) RateAlbum(context context.Context, request *pb.RateRequest) (*pb.RateResponse, error) {
+	_, err := s.FindReviewByUserAlbum(request.UserId, request.GetAlbumId())
+	fmt.Println(err)
+	if err == nil {
+		s.Repo.DB.Save(mapRatingDataRatingAlbum(request))
+		return &pb.RateResponse{
+			Status: http.StatusOK,
+		}, nil
+	}
+	s.Repo.DB.Create(mapRatingDataRatingAlbum(request))
 
-	for _, rating := range ratingsAlbum {
-		ratingDatas = append(ratingDatas, mapAlbumRatingRatingData(&rating))
-	}
-	return ratingDatas
+	return &pb.RateResponse{
+		Status: http.StatusOK,
+	}, nil
 }
-func mapSongRatingRatingData(rating *models.SongRating) *pb.RatingData {
-	return &pb.RatingData{
-		RatingValue: float32(rating.RatingValue),
-		UserId:      rating.UserID,
-		RatingType: &pb.RatingData_SongId{
-			SongId: rating.SongID,
-		},
+
+func (s Server) FindReviewByUserSong(userId int64, songId int64) (models.SongRating, error) {
+	var review models.SongRating
+	if result := s.Repo.DB.Where(&models.SongRating{UserID: userId, SongID: songId}).Find(&review); result.Error != nil {
+		return review, result.Error
 	}
+	return review, nil
 }
-func mapAlbumRatingRatingData(rating *models.AlbumRating) *pb.RatingData {
-	return &pb.RatingData{
-		RatingValue: float32(rating.RatingValue),
-		UserId:      rating.UserID,
-		RatingType: &pb.RatingData_AlbumId{
-			AlbumId: rating.AlbumId,
-		},
+
+func (s Server) FindReviewByUserAlbum(userId int64, albumId int64) (models.AlbumRating, error) {
+	var review models.AlbumRating
+	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: userId, AlbumId: albumId}).Find(&review); result.Error != nil {
+		return review, result.Error
 	}
+	return review, nil
 }
