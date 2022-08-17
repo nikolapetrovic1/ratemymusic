@@ -1,4 +1,4 @@
-use crate::{schema::comments, comment::CommentRequest};
+use crate::{schema::comments, comment::{CommentRequest}};
 
 
 #[derive(Insertable)]
@@ -17,13 +17,12 @@ pub struct Comment {
     pub review_id: i32,
 }
 
-
-// impl From<CommentRequest> for NewComment<'_> {
-//     fn from(request: CommentRequest) -> Self {
-//       Self {
-//        comment : &request.comment,
-//        user_id : request.user_id,
-//        review_id : request.review_id,
-//       }
-//     }
-//   }
+pub fn map_comment_to_comment_request(comment_value:&Comment) -> CommentRequest{
+    let comment_request = CommentRequest {
+        id: comment_value.id,
+        comment: comment_value.comment.clone(),
+        user_id: comment_value.user_id,
+        review_id: comment_value.review_id,
+    };
+    return comment_request;
+}

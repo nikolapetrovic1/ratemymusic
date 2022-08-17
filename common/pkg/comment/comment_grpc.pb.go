@@ -23,6 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type CommentsClient interface {
 	CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	GetByReview(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
 }
 
 type commentsClient struct {
@@ -42,11 +44,31 @@ func (c *commentsClient) CreateComment(ctx context.Context, in *CommentRequest, 
 	return out, nil
 }
 
+func (c *commentsClient) UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/UpdateComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commentsClient) GetByReview(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error) {
+	out := new(AllCommentsResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/GetByReview", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CommentsServer is the server API for Comments service.
 // All implementations must embed UnimplementedCommentsServer
 // for forward compatibility
 type CommentsServer interface {
 	CreateComment(context.Context, *CommentRequest) (*CommentResponse, error)
+	UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error)
+	GetByReview(context.Context, *IdRequest) (*AllCommentsResponse, error)
 	mustEmbedUnimplementedCommentsServer()
 }
 
@@ -56,6 +78,12 @@ type UnimplementedCommentsServer struct {
 
 func (UnimplementedCommentsServer) CreateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateComment not implemented")
+}
+func (UnimplementedCommentsServer) UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateComment not implemented")
+}
+func (UnimplementedCommentsServer) GetByReview(context.Context, *IdRequest) (*AllCommentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByReview not implemented")
 }
 func (UnimplementedCommentsServer) mustEmbedUnimplementedCommentsServer() {}
 
@@ -88,6 +116,42 @@ func _Comments_CreateComment_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Comments_UpdateComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CommentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).UpdateComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/UpdateComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).UpdateComment(ctx, req.(*CommentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Comments_GetByReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).GetByReview(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/GetByReview",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).GetByReview(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Comments_ServiceDesc is the grpc.ServiceDesc for Comments service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +162,14 @@ var Comments_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateComment",
 			Handler:    _Comments_CreateComment_Handler,
+		},
+		{
+			MethodName: "UpdateComment",
+			Handler:    _Comments_UpdateComment_Handler,
+		},
+		{
+			MethodName: "GetByReview",
+			Handler:    _Comments_GetByReview_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

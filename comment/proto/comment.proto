@@ -6,15 +6,23 @@ option go_package = "./pkg/pb";
 
 service Comments{
     rpc CreateComment(CommentRequest) returns (CommentResponse) {};
+    rpc UpdateComment(CommentRequest) returns (CommentResponse) {};
+    rpc GetByReview(IdRequest) returns (AllCommentsResponse) {};
+}
+message IdRequest{
+    int32 id = 1;
 }
 
+message AllCommentsResponse{
+    repeated CommentRequest comments = 1;
+}
 message CommentRequest {
-    string comment = 1;
-    int32 userId = 2;
-    int32 reviewId = 3;
+    int32 id = 1;
+    string comment = 2;
+    int32 userId = 3;
+    int32 reviewId = 4;
 }
 
 message CommentResponse {
     string status = 1;
-
 }

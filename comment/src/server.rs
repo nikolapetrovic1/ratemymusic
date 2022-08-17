@@ -2,16 +2,13 @@
 extern crate diesel;
 extern crate dotenv;
 
-
-// use crate::models::Comment;
-
-// use self::diesel::prelude::*;
 use db::establish_connection;
+use models::map_comment_to_comment_request;
 use tonic::{transport::Server, Request, Response, Status};
 use comment::comments_server::{Comments,CommentsServer};
-use comment::{CommentRequest,CommentResponse};
-use crate::comment_ops::create_comment;
-use crate::models::{NewComment};
+use comment::{CommentRequest,CommentResponse,AllCommentsResponse,IdRequest};
+use crate::comment_ops::{create_comment,update_comment,get_by_review};
+
 
 
 mod comment_ops;
@@ -34,9 +31,25 @@ impl Comments for CommentService{
             let req = request.into_inner();
             create_comment(req);
             let reply = CommentResponse {
-                status: format!("Sent {} BTC to", 200).into(),
+                status: format!("Added new comment!").into(),
             };
             Ok(Response::new(reply))
+        }
+        async fn update_comment(&self,request: Request<CommentRequest>,) -> Result<Response<CommentResponse>, Status> {
+            let reply = CommentResponse {
+                status: format!("Updated comment!").into(),
+            };
+            let req = request.into_inner();
+            update_comment(req);
+
+            Ok(Response::new(reply))
+        }
+        async fn get_by_review(&self,request: Request<IdRequest>,) -> Result<Response<AllCommentsResponse>,Status> {
+            let req = request.into_inner();
+            let result = get_by_review(req.id);
+            let comments =  result.iter().map(|comment_value | map_comment_to_comment_request(comment_value)).collect::<Vec<CommentRequest>>();
+            let response = AllCommentsResponse {comments : comments};
+            Ok(Response::new(response))
         }
 }
 #[tokio::main]

@@ -16,6 +16,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 
 	routes := r.Group("/comment")
 	routes.POST("/", svc.Create)
+	routes.GET("/review/:id", svc.FindByReview)
 	//routes.PUT("/", svc.Update)
 	//routes.DELETE("/:id", svc.Delete)
 	//routes.GET("/search/?")
@@ -23,6 +24,9 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 
 func (svc *ServiceClient) Create(ctx *gin.Context) {
 	routes.Create(ctx, svc.Client)
+}
+func (svc *ServiceClient) FindByReview(ctx *gin.Context) {
+	routes.FindByReview(ctx, svc.Client)
 }
 
 //func (svc *ServiceClient) Update(ctx *gin.Context) {
