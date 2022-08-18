@@ -38,3 +38,10 @@ func (s AlbumServer) FindOne(context context.Context, request *pb.IDRequest) (*p
 		Data:   utils.MapAlbumToAlbumResponse(&album),
 	}, nil
 }
+
+func (s *AlbumServer) SearchAlbums(context context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
+	return &pb.FindAllResponse{
+		Status: http.StatusOK,
+		Songs:  utils.MapAlbumListToAlbumResponse(s.Repo.SearchAlbums(request.Query)),
+	}, nil
+}

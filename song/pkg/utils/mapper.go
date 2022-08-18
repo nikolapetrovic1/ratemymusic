@@ -13,7 +13,13 @@ func MapAlbumToAlbumResponse(album *models.Album) *pb.AlbumData {
 		MusicianID: album.MusicianID,
 	}
 }
-
+func MapAlbumListToAlbumResponse(albums []models.Album) []*pb.AlbumData {
+	var albumResponse []*pb.AlbumData
+	for _, album := range albums {
+		albumResponse = append(albumResponse, MapAlbumToAlbumResponse(&album))
+	}
+	return albumResponse
+}
 func MapListSongResponse(songs []models.Song) []*pb1.SongResponse {
 	var songResponse []*pb1.SongResponse
 	for _, song := range songs {

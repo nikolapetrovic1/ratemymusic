@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/auth"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/comment"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/config"
@@ -19,7 +20,7 @@ func main() {
 	}
 
 	r := gin.Default()
-
+	r.Use(pkg.CORSMiddleware())
 	authSvc := *auth.RegisterRoutes(r, &c)
 
 	song.RegisterRoutes(r, &c, &authSvc)

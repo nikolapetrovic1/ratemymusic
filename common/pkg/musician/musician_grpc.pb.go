@@ -26,6 +26,7 @@ type MusicianServiceClient interface {
 	CreateMusician(ctx context.Context, in *MusicianData, opts ...grpc.CallOption) (*FindOneResponse, error)
 	UpdateMusician(ctx context.Context, in *MusicianData, opts ...grpc.CallOption) (*FindOneResponse, error)
 	DeleteMusician(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	SearchMusician(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error)
 }
 
 type musicianServiceClient struct {
@@ -72,6 +73,15 @@ func (c *musicianServiceClient) DeleteMusician(ctx context.Context, in *DeleteRe
 	return out, nil
 }
 
+func (c *musicianServiceClient) SearchMusician(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*SearchResponse, error) {
+	out := new(SearchResponse)
+	err := c.cc.Invoke(ctx, "/auth.MusicianService/SearchMusician", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MusicianServiceServer is the server API for MusicianService service.
 // All implementations must embed UnimplementedMusicianServiceServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type MusicianServiceServer interface {
 	CreateMusician(context.Context, *MusicianData) (*FindOneResponse, error)
 	UpdateMusician(context.Context, *MusicianData) (*FindOneResponse, error)
 	DeleteMusician(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	SearchMusician(context.Context, *SearchRequest) (*SearchResponse, error)
 	mustEmbedUnimplementedMusicianServiceServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedMusicianServiceServer) UpdateMusician(context.Context, *Music
 }
 func (UnimplementedMusicianServiceServer) DeleteMusician(context.Context, *DeleteRequest) (*DeleteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteMusician not implemented")
+}
+func (UnimplementedMusicianServiceServer) SearchMusician(context.Context, *SearchRequest) (*SearchResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SearchMusician not implemented")
 }
 func (UnimplementedMusicianServiceServer) mustEmbedUnimplementedMusicianServiceServer() {}
 
@@ -184,6 +198,24 @@ func _MusicianService_DeleteMusician_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MusicianService_SearchMusician_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MusicianServiceServer).SearchMusician(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/auth.MusicianService/SearchMusician",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MusicianServiceServer).SearchMusician(ctx, req.(*SearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MusicianService_ServiceDesc is the grpc.ServiceDesc for MusicianService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var MusicianService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteMusician",
 			Handler:    _MusicianService_DeleteMusician_Handler,
+		},
+		{
+			MethodName: "SearchMusician",
+			Handler:    _MusicianService_SearchMusician_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

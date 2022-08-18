@@ -19,7 +19,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.POST("/", svc.Create)
 	routes.PUT("/", svc.Update)
 	routes.DELETE("/:id", svc.Delete)
-	routes.GET("/search/?")
+	routes.GET("/search", svc.Search)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
@@ -38,5 +38,5 @@ func (svc *ServiceClient) Delete(ctx *gin.Context) {
 }
 
 func (svc *ServiceClient) Search(ctx *gin.Context) {
-	routes.Delete(ctx, svc.Client)
+	routes.Search(ctx, svc.Client)
 }

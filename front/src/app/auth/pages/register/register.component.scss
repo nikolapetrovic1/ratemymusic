@@ -1,0 +1,22 @@
+.container {
+    display: inline-flex; /* or inline-flex */
+    flex-direction: column;
+  }
+  
+  .registerForm {
+    display: inline-flex; /* or inline-flex */
+    flex-direction: column;
+    width: 450px;
+    position: absolute;
+    left: 50%;
+    margin-top: 250px;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+  
+    background-color: azure;
+    color: black;
+  
+    border-radius: 18px;
+  
+    padding: 18px;
+  }

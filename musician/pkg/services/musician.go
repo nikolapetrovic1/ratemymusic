@@ -68,6 +68,19 @@ func (s *Server) DeleteMusician(context context.Context, request *pb.DeleteReque
 		Status: http.StatusAccepted,
 	}, nil
 }
+
+func (s *Server) SearchMusician(context context.Context, request *pb.SearchRequest) (*pb.SearchResponse, error) {
+	return &pb.SearchResponse{
+		Musicians: mapMusicianListMusicianData(s.Repo.SearchMusician(request.Query)),
+	}, nil
+}
+func mapMusicianListMusicianData(musicians []models.Musician) []*pb.MusicianData {
+	var musicianData []*pb.MusicianData
+	for _, musician := range musicians {
+		musicianData = append(musicianData, mapMusicianMusicianData(musician))
+	}
+	return musicianData
+}
 func mapMusicianDataMusician(musicianData *pb.MusicianData) *models.Musician {
 	return &models.Musician{
 		ID:           musicianData.Id,

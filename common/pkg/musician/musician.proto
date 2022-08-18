@@ -9,6 +9,7 @@ service MusicianService {
   rpc CreateMusician(MusicianData) returns (FindOneResponse){}
   rpc UpdateMusician(MusicianData) returns (FindOneResponse){}
   rpc DeleteMusician(DeleteRequest) returns (DeleteResponse){}
+  rpc SearchMusician(SearchRequest) returns (SearchResponse) {}
 }
 message SongData{
   int64 id = 1;
@@ -30,7 +31,12 @@ message FindOneResponse{
   string error = 2;
   MusicianData data = 3;
 }
-
+message SearchRequest{
+  string query = 1;
+}
+message SearchResponse{
+  repeated MusicianData musicians = 1;
+}
 message DeleteRequest { int64 id = 1; }
 
 message DeleteResponse {
