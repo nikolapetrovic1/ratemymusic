@@ -1,0 +1,11 @@
+.content{
+    display: flex;
+      gap: 10px;
+}
+
+.item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}

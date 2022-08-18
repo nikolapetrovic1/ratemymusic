@@ -15,12 +15,16 @@ service SongService{
 }
 
 
+message Genre{
+  string name = 1;
+}
 //CREATE
 message SongRequest{
   int64 id = 1;
   string name = 2;
   int32 duration = 3;
   int64 musicianID = 4;
+  repeated Genre genres = 5;
 }
 
 message CreateSongResponse{

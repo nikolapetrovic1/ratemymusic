@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-
+import {NgbConfig} from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
