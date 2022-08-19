@@ -1,3 +1,25 @@
 <p>song-profile works!</p>
+<div class="rating">
+    <p>Rating :     <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
+
+        <ng-template let-fill="fill" let-index="index">
+            <span class="star" [class.filled]="fill === 100">&#9733;</span>
+            </ng-template>
+    </ngb-rating></p>
+</div>
+
+<div class="ratings">
+    <h2>All ratings</h2>
+    <ngb-rating *ngFor="let rating of ratings"   [(rate)]="rating.rating_value" [readonly]="true">
+
+        <ng-template let-fill="fill" let-index="index">
+            <span class="star" [class.filled]="fill === 100">&#9733;</span>
+            </ng-template>
+            
+        </ngb-rating>
+        
+</div>
 
 {{song|json}}
+{{ratings|json}}
+{{ratingValue.value|json}}

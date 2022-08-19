@@ -6,8 +6,7 @@ import { AllSongsComponent } from './components/all-songs/all-songs.component';
 import { SongCardComponent } from './components/song-card/song-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { SongProfileComponent } from './components/song-profile/song-profile.component';
-
-
+import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AllSongsComponent,
@@ -17,7 +16,8 @@ import { SongProfileComponent } from './components/song-profile/song-profile.com
   imports: [
     CommonModule,
     SongRoutingModule,
-    SharedModule
+    SharedModule,
+    NgbRatingModule
   ]
 })
 export class SongModule { }

@@ -22,6 +22,7 @@ func RateSong(ctx *gin.Context, c pb.RatingServiceClient) {
 		return
 	}
 
+	rateSongBody.UserId = ctx.GetInt64("userId")
 	res, err := c.RateSong(context.Background(), &pb.RateRequest{
 		Id:          rateSongBody.Id,
 		RatingValue: rateSongBody.RatingValue,

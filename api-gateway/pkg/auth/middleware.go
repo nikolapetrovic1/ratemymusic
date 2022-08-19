@@ -32,8 +32,8 @@ func (c *AuthMiddlewareConfig) AuthRequired(ctx *gin.Context, allowedRole []stri
 	}
 
 	res, err := c.svc.Client.Validate(context.Background(), &pb.ValidateRequest{
-		Token: token[1],
-		Roles: allowedRole,
+		AccessToken: token[1],
+		Roles:       allowedRole,
 	})
 
 	if err != nil || res.Status != http.StatusOK {

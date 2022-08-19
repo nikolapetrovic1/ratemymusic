@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/rating"
 	"github.com/nikolapetrovic1/ratemymusic/rating/pkg/db"
 	"github.com/nikolapetrovic1/ratemymusic/rating/pkg/models"
@@ -19,13 +18,13 @@ type Server struct {
 func (s Server) FindByUser(context context.Context, request *pb.IdRequest) (*pb.RatingResponse, error) {
 	var songRatings []models.SongRating
 	var albumRatings []models.AlbumRating
-	if result := s.Repo.DB.Where(&models.SongRating{UserID: 1}, request.Id).Find(&songRatings); result.Error != nil {
+	if result := s.Repo.DB.Where(&models.SongRating{UserID: request.Id}).Find(&songRatings); result.Error != nil {
 		return &pb.RatingResponse{
 			Status: http.StatusNotFound,
 			Error:  result.Error.Error(),
 		}, nil
 	}
-	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: 1}, request.Id).Find(&albumRatings); result.Error != nil {
+	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: request.Id}).Find(&albumRatings); result.Error != nil {
 		return &pb.RatingResponse{
 			Status: http.StatusNotFound,
 			Error:  result.Error.Error(),
@@ -41,7 +40,7 @@ func (s Server) FindByUser(context context.Context, request *pb.IdRequest) (*pb.
 func (s Server) FindBySong(context context.Context, request *pb.IdRequest) (*pb.RatingResponse, error) {
 	var songRatings []models.SongRating
 
-	if result := s.Repo.DB.Where(&models.SongRating{SongID: 1}, request.Id).Find(&songRatings); result.Error != nil {
+	if result := s.Repo.DB.Where(&models.SongRating{SongID: request.Id}).Find(&songRatings); result.Error != nil {
 		return &pb.RatingResponse{
 			Status: http.StatusNotFound,
 			Error:  result.Error.Error(),
@@ -56,7 +55,7 @@ func (s Server) FindBySong(context context.Context, request *pb.IdRequest) (*pb.
 func (s Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*pb.RatingResponse, error) {
 	var albumRatings []models.AlbumRating
 
-	if result := s.Repo.DB.Where(&models.AlbumRating{AlbumId: 1}, request.Id).Find(&albumRatings); result.Error != nil {
+	if result := s.Repo.DB.Where(&models.AlbumRating{AlbumId: request.Id}).Find(&albumRatings); result.Error != nil {
 		return &pb.RatingResponse{
 			Status: http.StatusNotFound,
 			Error:  result.Error.Error(),
@@ -68,8 +67,13 @@ func (s Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*pb
 	}, nil
 }
 func (s Server) RateSong(context context.Context, request *pb.RateRequest) (*pb.RateResponse, error) {
-	_, err := s.FindReviewByUserSong(request.UserId, request.GetSongId())
+
+	rating, err := s.FindByUserSong(context, &pb.UserSongRequest{
+		UserId: request.UserId,
+		SongId: request.GetSongId(),
+	})
 	if err == nil {
+		request.Id = rating.Id
 		s.Repo.DB.Save(mapRatingDataRatingSong(request))
 		return &pb.RateResponse{
 			Status: http.StatusOK,
@@ -83,9 +87,12 @@ func (s Server) RateSong(context context.Context, request *pb.RateRequest) (*pb.
 }
 
 func (s Server) RateAlbum(context context.Context, request *pb.RateRequest) (*pb.RateResponse, error) {
-	_, err := s.FindReviewByUserAlbum(request.UserId, request.GetAlbumId())
-	fmt.Println(err)
+	rating, err := s.FindByUserAlbum(context, &pb.UserAlbumRequest{
+		UserId:  request.UserId,
+		AlbumId: request.GetAlbumId(),
+	})
 	if err == nil {
+		request.Id = rating.Id
 		s.Repo.DB.Save(mapRatingDataRatingAlbum(request))
 		return &pb.RateResponse{
 			Status: http.StatusOK,
@@ -98,18 +105,17 @@ func (s Server) RateAlbum(context context.Context, request *pb.RateRequest) (*pb
 	}, nil
 }
 
-func (s Server) FindReviewByUserSong(userId int64, songId int64) (models.SongRating, error) {
-	var review models.SongRating
-	if result := s.Repo.DB.Where(&models.SongRating{UserID: userId, SongID: songId}).Find(&review); result.Error != nil {
-		return review, result.Error
+func (s Server) FindByUserAlbum(context context.Context, request *pb.UserAlbumRequest) (*pb.RatingData, error) {
+	var rating models.AlbumRating
+	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: request.UserId, AlbumId: request.AlbumId}).Find(&rating); result.Error != nil {
+		return nil, result.Error
 	}
-	return review, nil
+	return mapAlbumRatingRatingData(&rating), nil
 }
-
-func (s Server) FindReviewByUserAlbum(userId int64, albumId int64) (models.AlbumRating, error) {
-	var review models.AlbumRating
-	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: userId, AlbumId: albumId}).Find(&review); result.Error != nil {
-		return review, result.Error
+func (s Server) FindByUserSong(context context.Context, request *pb.UserSongRequest) (*pb.RatingData, error) {
+	var rating models.SongRating
+	if result := s.Repo.DB.Where(&models.SongRating{UserID: request.UserId, SongID: request.SongId}).Find(&rating); result.Error != nil {
+		return nil, result.Error
 	}
-	return review, nil
+	return mapSongRatingRatingData(&rating), nil
 }

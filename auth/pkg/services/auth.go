@@ -28,7 +28,7 @@ func (s *Server) Register(_ context.Context, req *pb.RegisterRequest) (*pb.Regis
 
 	user.Email = req.Email
 	user.Password = utils.HashPassword(req.Password)
-
+	user.Role = req.Role
 	s.H.DB.Create(&user)
 
 	return &pb.RegisterResponse{
@@ -55,16 +55,16 @@ func (s *Server) Login(_ context.Context, req *pb.LoginRequest) (*pb.LoginRespon
 		}, nil
 	}
 
-	token, _ := s.Jwt.GenerateToken(user)
+	accessToken, _ := s.Jwt.GenerateToken(user)
 
 	return &pb.LoginResponse{
-		Status: http.StatusOK,
-		Token:  token,
+		Status:      http.StatusOK,
+		AccessToken: accessToken,
 	}, nil
 }
 
 func (s *Server) Validate(_ context.Context, req *pb.ValidateRequest) (*pb.ValidateResponse, error) {
-	claims, err := s.Jwt.ValidateToken(req.Token)
+	claims, err := s.Jwt.ValidateToken(req.AccessToken)
 
 	if err != nil {
 		return &pb.ValidateResponse{

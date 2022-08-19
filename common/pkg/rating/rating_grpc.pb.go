@@ -25,6 +25,8 @@ type RatingServiceClient interface {
 	FindByUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*RatingResponse, error)
 	FindBySong(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*RatingResponse, error)
 	FindByAlbum(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*RatingResponse, error)
+	FindByUserSong(ctx context.Context, in *UserSongRequest, opts ...grpc.CallOption) (*RatingData, error)
+	FindByUserAlbum(ctx context.Context, in *UserAlbumRequest, opts ...grpc.CallOption) (*RatingData, error)
 	RateSong(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
 	RateAlbum(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
 }
@@ -64,6 +66,24 @@ func (c *ratingServiceClient) FindByAlbum(ctx context.Context, in *IdRequest, op
 	return out, nil
 }
 
+func (c *ratingServiceClient) FindByUserSong(ctx context.Context, in *UserSongRequest, opts ...grpc.CallOption) (*RatingData, error) {
+	out := new(RatingData)
+	err := c.cc.Invoke(ctx, "/rating.RatingService/FindByUserSong", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ratingServiceClient) FindByUserAlbum(ctx context.Context, in *UserAlbumRequest, opts ...grpc.CallOption) (*RatingData, error) {
+	out := new(RatingData)
+	err := c.cc.Invoke(ctx, "/rating.RatingService/FindByUserAlbum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *ratingServiceClient) RateSong(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error) {
 	out := new(RateResponse)
 	err := c.cc.Invoke(ctx, "/rating.RatingService/RateSong", in, out, opts...)
@@ -89,6 +109,8 @@ type RatingServiceServer interface {
 	FindByUser(context.Context, *IdRequest) (*RatingResponse, error)
 	FindBySong(context.Context, *IdRequest) (*RatingResponse, error)
 	FindByAlbum(context.Context, *IdRequest) (*RatingResponse, error)
+	FindByUserSong(context.Context, *UserSongRequest) (*RatingData, error)
+	FindByUserAlbum(context.Context, *UserAlbumRequest) (*RatingData, error)
 	RateSong(context.Context, *RateRequest) (*RateResponse, error)
 	RateAlbum(context.Context, *RateRequest) (*RateResponse, error)
 	mustEmbedUnimplementedRatingServiceServer()
@@ -106,6 +128,12 @@ func (UnimplementedRatingServiceServer) FindBySong(context.Context, *IdRequest) 
 }
 func (UnimplementedRatingServiceServer) FindByAlbum(context.Context, *IdRequest) (*RatingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByAlbum not implemented")
+}
+func (UnimplementedRatingServiceServer) FindByUserSong(context.Context, *UserSongRequest) (*RatingData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByUserSong not implemented")
+}
+func (UnimplementedRatingServiceServer) FindByUserAlbum(context.Context, *UserAlbumRequest) (*RatingData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByUserAlbum not implemented")
 }
 func (UnimplementedRatingServiceServer) RateSong(context.Context, *RateRequest) (*RateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RateSong not implemented")
@@ -180,6 +208,42 @@ func _RatingService_FindByAlbum_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RatingService_FindByUserSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserSongRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RatingServiceServer).FindByUserSong(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rating.RatingService/FindByUserSong",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RatingServiceServer).FindByUserSong(ctx, req.(*UserSongRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _RatingService_FindByUserAlbum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserAlbumRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RatingServiceServer).FindByUserAlbum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rating.RatingService/FindByUserAlbum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RatingServiceServer).FindByUserAlbum(ctx, req.(*UserAlbumRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RatingService_RateSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RateRequest)
 	if err := dec(in); err != nil {
@@ -234,6 +298,14 @@ var RatingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindByAlbum",
 			Handler:    _RatingService_FindByAlbum_Handler,
+		},
+		{
+			MethodName: "FindByUserSong",
+			Handler:    _RatingService_FindByUserSong_Handler,
+		},
+		{
+			MethodName: "FindByUserAlbum",
+			Handler:    _RatingService_FindByUserAlbum_Handler,
 		},
 		{
 			MethodName: "RateSong",

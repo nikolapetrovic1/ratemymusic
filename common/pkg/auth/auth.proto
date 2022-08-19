@@ -33,12 +33,12 @@ message LoginRequest {
 message LoginResponse {
   int64 status = 1;
   string error = 2;
-  string token = 3;
+  string accessToken = 3;
 }
 
 // Validate
 
-message ValidateRequest { string token = 1;
+message ValidateRequest { string accessToken = 1;
   repeated string roles = 2;
 }
 

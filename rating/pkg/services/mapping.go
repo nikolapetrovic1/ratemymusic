@@ -34,6 +34,7 @@ func mapListAlbumRatingRatingData(ratingsAlbum []models.AlbumRating) []*pb.Ratin
 }
 func mapSongRatingRatingData(rating *models.SongRating) *pb.RatingData {
 	return &pb.RatingData{
+		Id:          rating.ID,
 		RatingValue: float32(rating.RatingValue),
 		UserId:      rating.UserID,
 		RatingType: &pb.RatingData_SongId{
@@ -43,6 +44,7 @@ func mapSongRatingRatingData(rating *models.SongRating) *pb.RatingData {
 }
 func mapAlbumRatingRatingData(rating *models.AlbumRating) *pb.RatingData {
 	return &pb.RatingData{
+		Id:          rating.ID,
 		RatingValue: float32(rating.RatingValue),
 		UserId:      rating.UserID,
 		RatingType: &pb.RatingData_AlbumId{

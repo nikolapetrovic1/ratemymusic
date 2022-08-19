@@ -9,8 +9,20 @@ service RatingService {
   rpc FindByUser(IdRequest) returns (RatingResponse) {}
   rpc FindBySong(IdRequest) returns (RatingResponse){}
   rpc FindByAlbum(IdRequest) returns (RatingResponse){}
+  rpc FindByUserSong(UserSongRequest) returns (RatingData) {}
+  rpc FindByUserAlbum(UserAlbumRequest) returns (RatingData) {}
   rpc RateSong(RateRequest) returns (RateResponse){}
   rpc RateAlbum(RateRequest) returns (RateResponse){}
+}
+
+message UserSongRequest{
+  int64 user_id = 1;
+  int64 song_id = 2;
+}
+message UserAlbumRequest{
+  int64 user_id = 1;
+  int64 album_id = 2;
+
 }
 message RateRequest{
 
@@ -41,4 +53,5 @@ message RatingData{
     int64 albumId = 3;
     int64 songId = 4;
   }
+  int64 id = 5;
 }
