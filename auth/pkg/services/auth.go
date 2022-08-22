@@ -103,5 +103,13 @@ func (s *Server) CheckRoles(req *pb.ValidateRequest, userRole string) error {
 		}
 	}
 	return errors.New("user does not have needed role")
+}
 
+func (s *Server) FindById(context context.Context, request *pb.IdRequest) (*pb.UserInfoResponse, error) {
+	var user models.User
+	s.H.DB.Where(&models.User{Id: request.Id}).First(&user)
+	return &pb.UserInfoResponse{
+		Id:    user.Id,
+		Email: user.Email,
+	}, nil
 }

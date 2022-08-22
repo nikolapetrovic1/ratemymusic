@@ -1,0 +1,15 @@
+<div class="container">
+
+
+  <div class="search">
+    <mat-form-field appearance="outline">
+      <mat-label>Search album</mat-label>
+      <input matInput type="text" [(ngModel)]="query" (keyup)="search()" />
+    </mat-form-field>
+  </div>
+
+  <div class="content" *ngIf="albums">
+    <app-album-card *ngFor="let album of albums" class="item" [album]="album"></app-album-card>
+    {{albums|json}}
+  </div>
+</div>

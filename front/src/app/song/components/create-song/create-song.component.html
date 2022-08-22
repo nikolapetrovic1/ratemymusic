@@ -1,0 +1,50 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Song Name</mat-label>
+      <input matInput formControlName="name" />
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+        <mat-label>Duration</mat-label>
+        <input matInput formControlName="duration" type="number" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+          <mat-label>Musician</mat-label>
+          <input type="text"
+          matInput
+          formControlName="musician_id"
+          [matAutocomplete]="auto">
+
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let musician of filteredMusicians | async" [value]="musician.id" (onSelectionChange)="loadAlbums(musician.id)">
+              <span>{{musician.musician_name}}</span> |
+              <small>ID: {{musician.id}}</small>
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+            <mat-label>Album</mat-label>
+            <input type="text"
+            matInput
+            formControlName="album_id"
+            [matAutocomplete]="auto1">
+
+            <mat-autocomplete #auto1="matAutocomplete">
+              <mat-option *ngFor="let album of filteredAlbums | async" [value]="album.id" >
+                <span>{{album.name}}</span> |
+                <small>ID: {{album.id}}</small>
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        <button
+        mat-flat-button
+        class="lgn-button"
+        color="primary"
+        [disabled]="!form.valid"
+      >
+        Submit
+      </button>
+  </form>
+
+  {{albums|json}}

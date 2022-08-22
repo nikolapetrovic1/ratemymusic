@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Token } from '@angular/compiler';
 @Injectable({
@@ -26,5 +26,20 @@ export class AuthService {
       headers: this.headers,
       responseType: 'json',
     });
+  }
+  logout() {
+    localStorage.clear();
+  }
+
+  isLoggedIn(): boolean {
+    if (!localStorage.getItem("user")) {
+      return false;
+    }
+    return true;
+  }
+  loadUserInfo(id: any):Observable<any>{
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/auth/${id}`,
+    );
   }
 }

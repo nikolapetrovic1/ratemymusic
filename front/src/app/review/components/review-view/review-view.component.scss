@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-width: 600px;
+    gap:5px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+  .submit{
+    align-self: flex-end;
+    margin-bottom: 1rem;
+}
+

@@ -24,7 +24,10 @@ const _ = grpc.SupportPackageIsVersion7
 type CommentsClient interface {
 	CreateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
 	UpdateComment(ctx context.Context, in *CommentRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	ReportComment(ctx context.Context, in *ReportRequest, opts ...grpc.CallOption) (*CommentResponse, error)
+	DeleteComment(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommentResponse, error)
 	GetByReview(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
+	GetAllByReportCount(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
 }
 
 type commentsClient struct {
@@ -53,9 +56,36 @@ func (c *commentsClient) UpdateComment(ctx context.Context, in *CommentRequest, 
 	return out, nil
 }
 
+func (c *commentsClient) ReportComment(ctx context.Context, in *ReportRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/ReportComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commentsClient) DeleteComment(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommentResponse, error) {
+	out := new(CommentResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/DeleteComment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *commentsClient) GetByReview(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error) {
 	out := new(AllCommentsResponse)
 	err := c.cc.Invoke(ctx, "/comment.Comments/GetByReview", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commentsClient) GetAllByReportCount(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error) {
+	out := new(AllCommentsResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/GetAllByReportCount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +98,10 @@ func (c *commentsClient) GetByReview(ctx context.Context, in *IdRequest, opts ..
 type CommentsServer interface {
 	CreateComment(context.Context, *CommentRequest) (*CommentResponse, error)
 	UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error)
+	ReportComment(context.Context, *ReportRequest) (*CommentResponse, error)
+	DeleteComment(context.Context, *IdRequest) (*CommentResponse, error)
 	GetByReview(context.Context, *IdRequest) (*AllCommentsResponse, error)
+	GetAllByReportCount(context.Context, *IdRequest) (*AllCommentsResponse, error)
 	mustEmbedUnimplementedCommentsServer()
 }
 
@@ -82,8 +115,17 @@ func (UnimplementedCommentsServer) CreateComment(context.Context, *CommentReques
 func (UnimplementedCommentsServer) UpdateComment(context.Context, *CommentRequest) (*CommentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateComment not implemented")
 }
+func (UnimplementedCommentsServer) ReportComment(context.Context, *ReportRequest) (*CommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ReportComment not implemented")
+}
+func (UnimplementedCommentsServer) DeleteComment(context.Context, *IdRequest) (*CommentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteComment not implemented")
+}
 func (UnimplementedCommentsServer) GetByReview(context.Context, *IdRequest) (*AllCommentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetByReview not implemented")
+}
+func (UnimplementedCommentsServer) GetAllByReportCount(context.Context, *IdRequest) (*AllCommentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllByReportCount not implemented")
 }
 func (UnimplementedCommentsServer) mustEmbedUnimplementedCommentsServer() {}
 
@@ -134,6 +176,42 @@ func _Comments_UpdateComment_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Comments_ReportComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).ReportComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/ReportComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).ReportComment(ctx, req.(*ReportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Comments_DeleteComment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).DeleteComment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/DeleteComment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).DeleteComment(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Comments_GetByReview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IdRequest)
 	if err := dec(in); err != nil {
@@ -148,6 +226,24 @@ func _Comments_GetByReview_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(CommentsServer).GetByReview(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Comments_GetAllByReportCount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).GetAllByReportCount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/GetAllByReportCount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).GetAllByReportCount(ctx, req.(*IdRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -168,8 +264,20 @@ var Comments_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Comments_UpdateComment_Handler,
 		},
 		{
+			MethodName: "ReportComment",
+			Handler:    _Comments_ReportComment_Handler,
+		},
+		{
+			MethodName: "DeleteComment",
+			Handler:    _Comments_DeleteComment_Handler,
+		},
+		{
 			MethodName: "GetByReview",
 			Handler:    _Comments_GetByReview_Handler,
+		},
+		{
+			MethodName: "GetAllByReportCount",
+			Handler:    _Comments_GetAllByReportCount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

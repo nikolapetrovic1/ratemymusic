@@ -14,9 +14,10 @@ export class AllSongsComponent implements OnInit {
   constructor(private songService:SongService) { }
 
   ngOnInit(): void {
+    this.search();
   }
 
-  search(event: Event){
+  search(){
     this.songService.search(this.query).subscribe((res)=>{
       this.songs = res.body.songs;
     })

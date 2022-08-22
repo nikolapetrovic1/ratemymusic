@@ -2,7 +2,6 @@ package services
 
 import (
 	"context"
-	"fmt"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
 	"github.com/nikolapetrovic1/ratemymusic/song/client"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/db"
@@ -29,14 +28,9 @@ func (s *Server) FindOne(ctx context.Context, request *pb.FindOneRequest) (*pb.F
 		}, nil
 	}
 
-	data := &pb.FindOneData{
-		Id:   song.ID,
-		Name: song.Name,
-	}
-
 	return &pb.FindOneResponse{
 		Status: http.StatusOK,
-		Data:   data,
+		Data:   utils.MapSongResponse(song),
 	}, nil
 }
 
@@ -55,7 +49,6 @@ func (s *Server) FindByMusician(context context.Context, request *pb.FindByMusic
 			Error:  result.Error.Error(),
 		}, nil
 	}
-	fmt.Println(songs)
 	return &pb.FindByMusicianResponse{
 		Status: http.StatusOK,
 		Songs:  utils.MapListSongResponse(songs),
@@ -63,15 +56,18 @@ func (s *Server) FindByMusician(context context.Context, request *pb.FindByMusic
 	}, nil
 }
 
-func (s *Server) CreateSong(context context.Context, songRequest *pb.SongRequest) (*pb.CreateSongResponse, error) {
-	s.Repo.DB.Create(utils.MapSongRequestSong(songRequest))
+func (s *Server) CreateSong(context context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
+	var song models.Song
+
+	song = utils.MapSongRequestSong(songRequest)
+	s.Repo.DB.Create(&song)
 
 	return &pb.CreateSongResponse{
 		Status: http.StatusCreated,
 	}, nil
 }
 
-func (s *Server) UpdateSong(context context.Context, songRequest *pb.SongRequest) (*pb.CreateSongResponse, error) {
+func (s *Server) UpdateSong(context context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
 	s.Repo.DB.Save(utils.MapSongRequestSong(songRequest))
 
 	return &pb.CreateSongResponse{
@@ -91,5 +87,20 @@ func (s *Server) SearchSong(context context.Context, request *pb.SearchRequest) 
 	return &pb.FindAllResponse{
 		Status: http.StatusOK,
 		Songs:  utils.MapListSongResponse(s.Repo.SearchSongs(request.Query)),
+	}, nil
+}
+
+func (s *Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*pb.FindByMusicianResponse, error) {
+	var songs []models.Song
+	if result := s.Repo.DB.Where(&models.Song{AlbumID: request.Id}).Find(&songs); result.Error != nil {
+		return &pb.FindByMusicianResponse{
+			Status: http.StatusNotFound,
+			Error:  result.Error.Error(),
+		}, nil
+	}
+	return &pb.FindByMusicianResponse{
+		Status: http.StatusOK,
+		Songs:  utils.MapListSongResponse(songs),
+		Id:     request.Id,
 	}, nil
 }

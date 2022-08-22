@@ -1,0 +1,12 @@
+.review{
+
+    border: 1px;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-width: 600px;
+    gap: 5px;
+  }

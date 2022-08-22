@@ -6,13 +6,17 @@ import { AllMusiciansComponent } from './components/all-musicians/all-musicians.
 import { SharedModule } from '../shared/shared.module';
 import { MusicianCardComponent } from './components/musician-card/musician-card.component';
 import { MusicianProfileComponent } from './components/musician-profile/musician-profile.component';
+import { CreateMusicianComponent } from './components/create-musician/create-musician.component';
+import { UpdateMusicianComponent } from './components/update-musician/update-musician.component';
 
 
 @NgModule({
   declarations: [
     AllMusiciansComponent,
     MusicianCardComponent,
-    MusicianProfileComponent
+    MusicianProfileComponent,
+    CreateMusicianComponent,
+    UpdateMusicianComponent
   ],
   imports: [
     CommonModule,

@@ -24,8 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 type SongServiceClient interface {
 	FindOne(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (*FindOneResponse, error)
 	FindByMusician(ctx context.Context, in *FindByMusicianRequest, opts ...grpc.CallOption) (*FindByMusicianResponse, error)
-	CreateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
-	UpdateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
+	FindByAlbum(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*FindByMusicianResponse, error)
+	CreateSong(ctx context.Context, in *SongData, opts ...grpc.CallOption) (*CreateSongResponse, error)
+	UpdateSong(ctx context.Context, in *SongData, opts ...grpc.CallOption) (*CreateSongResponse, error)
 	DeleteSong(ctx context.Context, in *DeleteSongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error)
 	SearchSong(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*FindAllResponse, error)
 }
@@ -56,7 +57,16 @@ func (c *songServiceClient) FindByMusician(ctx context.Context, in *FindByMusici
 	return out, nil
 }
 
-func (c *songServiceClient) CreateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error) {
+func (c *songServiceClient) FindByAlbum(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*FindByMusicianResponse, error) {
+	out := new(FindByMusicianResponse)
+	err := c.cc.Invoke(ctx, "/song.SongService/FindByAlbum", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *songServiceClient) CreateSong(ctx context.Context, in *SongData, opts ...grpc.CallOption) (*CreateSongResponse, error) {
 	out := new(CreateSongResponse)
 	err := c.cc.Invoke(ctx, "/song.SongService/CreateSong", in, out, opts...)
 	if err != nil {
@@ -65,7 +75,7 @@ func (c *songServiceClient) CreateSong(ctx context.Context, in *SongRequest, opt
 	return out, nil
 }
 
-func (c *songServiceClient) UpdateSong(ctx context.Context, in *SongRequest, opts ...grpc.CallOption) (*CreateSongResponse, error) {
+func (c *songServiceClient) UpdateSong(ctx context.Context, in *SongData, opts ...grpc.CallOption) (*CreateSongResponse, error) {
 	out := new(CreateSongResponse)
 	err := c.cc.Invoke(ctx, "/song.SongService/UpdateSong", in, out, opts...)
 	if err != nil {
@@ -98,8 +108,9 @@ func (c *songServiceClient) SearchSong(ctx context.Context, in *SearchRequest, o
 type SongServiceServer interface {
 	FindOne(context.Context, *FindOneRequest) (*FindOneResponse, error)
 	FindByMusician(context.Context, *FindByMusicianRequest) (*FindByMusicianResponse, error)
-	CreateSong(context.Context, *SongRequest) (*CreateSongResponse, error)
-	UpdateSong(context.Context, *SongRequest) (*CreateSongResponse, error)
+	FindByAlbum(context.Context, *IdRequest) (*FindByMusicianResponse, error)
+	CreateSong(context.Context, *SongData) (*CreateSongResponse, error)
+	UpdateSong(context.Context, *SongData) (*CreateSongResponse, error)
 	DeleteSong(context.Context, *DeleteSongRequest) (*CreateSongResponse, error)
 	SearchSong(context.Context, *SearchRequest) (*FindAllResponse, error)
 	mustEmbedUnimplementedSongServiceServer()
@@ -115,10 +126,13 @@ func (UnimplementedSongServiceServer) FindOne(context.Context, *FindOneRequest) 
 func (UnimplementedSongServiceServer) FindByMusician(context.Context, *FindByMusicianRequest) (*FindByMusicianResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByMusician not implemented")
 }
-func (UnimplementedSongServiceServer) CreateSong(context.Context, *SongRequest) (*CreateSongResponse, error) {
+func (UnimplementedSongServiceServer) FindByAlbum(context.Context, *IdRequest) (*FindByMusicianResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindByAlbum not implemented")
+}
+func (UnimplementedSongServiceServer) CreateSong(context.Context, *SongData) (*CreateSongResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateSong not implemented")
 }
-func (UnimplementedSongServiceServer) UpdateSong(context.Context, *SongRequest) (*CreateSongResponse, error) {
+func (UnimplementedSongServiceServer) UpdateSong(context.Context, *SongData) (*CreateSongResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateSong not implemented")
 }
 func (UnimplementedSongServiceServer) DeleteSong(context.Context, *DeleteSongRequest) (*CreateSongResponse, error) {
@@ -176,8 +190,26 @@ func _SongService_FindByMusician_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _SongService_FindByAlbum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SongServiceServer).FindByAlbum(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/song.SongService/FindByAlbum",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SongServiceServer).FindByAlbum(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _SongService_CreateSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SongRequest)
+	in := new(SongData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -189,13 +221,13 @@ func _SongService_CreateSong_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/song.SongService/CreateSong",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SongServiceServer).CreateSong(ctx, req.(*SongRequest))
+		return srv.(SongServiceServer).CreateSong(ctx, req.(*SongData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
 func _SongService_UpdateSong_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SongRequest)
+	in := new(SongData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -207,7 +239,7 @@ func _SongService_UpdateSong_Handler(srv interface{}, ctx context.Context, dec f
 		FullMethod: "/song.SongService/UpdateSong",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SongServiceServer).UpdateSong(ctx, req.(*SongRequest))
+		return srv.(SongServiceServer).UpdateSong(ctx, req.(*SongData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -262,6 +294,10 @@ var SongService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FindByMusician",
 			Handler:    _SongService_FindByMusician_Handler,
+		},
+		{
+			MethodName: "FindByAlbum",
+			Handler:    _SongService_FindByAlbum_Handler,
 		},
 		{
 			MethodName: "CreateSong",

@@ -15,9 +15,10 @@ export class AllMusiciansComponent implements OnInit {
   constructor(private musicianService:MusicianService) { }
 
   ngOnInit(): void {
+    this.search();
   }
 
-  search(event: Event){
+  search(){
     this.musicianService.search(this.query).subscribe((res)=>{
       this.musicians = res.body.musicians;
     })

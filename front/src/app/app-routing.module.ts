@@ -24,6 +24,16 @@ const routes: Routes = [
     component: LayoutComponent,
     loadChildren: () => import('./album/album.module').then((m) => m.AlbumModule),
   },
+  {
+    path: 'comment',
+    component: LayoutComponent,
+    loadChildren: () => import('./comment/comment.module').then((m) => m.CommentModule),
+  },
+  {
+    path: 'user',
+    component: LayoutComponent,
+    loadChildren: () => import('./user/user.module').then((m) => m.UserModule),
+  },
 ];
 
 @NgModule({

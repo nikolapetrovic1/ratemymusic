@@ -30,9 +30,3 @@ func (handler *Handler) SearchSongs(songName string) []models.Song {
 	handler.DB.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(songName)+"%").Find(&songs)
 	return songs
 }
-
-func (handler *Handler) SearchAlbums(albumName string) []models.Album {
-	var albums []models.Album
-	handler.DB.Where("LOWER(name) LIKE ?", "%"+strings.ToLower(albumName)+"%").Find(&albums)
-	return albums
-}

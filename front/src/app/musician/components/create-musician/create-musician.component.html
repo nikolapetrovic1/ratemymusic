@@ -1,0 +1,24 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="form">
+    <mat-form-field appearance="outline">
+      <mat-label>Musician Name</mat-label>
+      <input matInput formControlName="musician_name" />
+    </mat-form-field>
+    
+      <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+            <mat-label>Surname</mat-label>
+            <input matInput formControlName="surname" />
+          </mat-form-field>
+        <button
+        mat-flat-button
+        class="lgn-button"
+        color="primary"
+        [disabled]="!form.valid"
+      >
+        Submit
+      </button>
+  </form>

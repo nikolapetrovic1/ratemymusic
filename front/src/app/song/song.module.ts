@@ -7,17 +7,23 @@ import { SongCardComponent } from './components/song-card/song-card.component';
 import { SharedModule } from '../shared/shared.module';
 import { SongProfileComponent } from './components/song-profile/song-profile.component';
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
+import { ReviewModule } from '../review/review.module';
+import { CreateSongComponent } from './components/create-song/create-song.component';
 @NgModule({
   declarations: [
     AllSongsComponent,
     SongCardComponent,
-    SongProfileComponent
+    SongProfileComponent,
+    CreateSongComponent,
+    
   ],
   imports: [
     CommonModule,
     SongRoutingModule,
     SharedModule,
-    NgbRatingModule
+    NgbRatingModule,
+    ReviewModule
+    
   ]
 })
 export class SongModule { }

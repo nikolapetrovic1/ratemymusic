@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/nikolapetrovic1/ratemymusic/rating/pkg/models"
+	"github.com/nikolapetrovic1/ratemymusic/review/pkg/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -18,6 +18,6 @@ func Init(url string) Handler {
 		log.Fatalln(err)
 	}
 
-	db.AutoMigrate(&models.SongRating{}, &models.AlbumRating{})
+	db.AutoMigrate(&models.Review{})
 	return Handler{db}
 }

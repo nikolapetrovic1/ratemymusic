@@ -14,10 +14,13 @@ func RegisterRoutes(r *gin.Engine, c *config.Config) *ServiceClient {
 	routes := r.Group("/auth")
 	routes.POST("/register", svc.Register)
 	routes.POST("/login", svc.Login)
-
+	routes.GET("/:id", svc.FindOne)
 	return svc
 }
 
+func (svc *ServiceClient) FindOne(ctx *gin.Context) {
+	routes.FindById(ctx, svc.Client)
+}
 func (svc *ServiceClient) Register(ctx *gin.Context) {
 	routes.Register(ctx, svc.Client)
 }

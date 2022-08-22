@@ -1,0 +1,23 @@
+<div *ngIf="review.user" class="container">
+    <div class="user">
+        <h2><b>{{review.user.email}}</b> </h2>
+        </div>
+
+     <h3>{{review.text}}</h3>
+
+    <hr>
+
+<app-comment *ngFor="let comment of comments" [comment]="comment">
+<hr>
+</app-comment>
+
+
+
+<mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Leave a comment</mat-label>
+    <textarea matInput placeholder="Ex. This review is amazing" [(ngModel)]="comment" ></textarea>
+  </mat-form-field>
+  <button mat-raised-button color="primary" class="submit" (click)="submit()">Submit</button>
+
+
+</div>

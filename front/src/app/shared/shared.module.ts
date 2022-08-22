@@ -10,9 +10,13 @@ import { HeaderComponent } from './components/header/header.component';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatCardModule} from '@angular/material/card';
 import {NgbRatingModule} from '@ng-bootstrap/ng-bootstrap';
+import {MatIconModule} from '@angular/material/icon';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatTableModule} from '@angular/material/table';
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     CommonModule,
@@ -25,7 +29,11 @@ import {NgbRatingModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     MatCardModule,
     FormsModule,
-    NgbRatingModule
+    NgbRatingModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatTableModule
   ],
   exports: [
     HeaderComponent,
@@ -37,7 +45,11 @@ import {NgbRatingModule} from '@ng-bootstrap/ng-bootstrap';
     MatToolbarModule,
     MatCardModule,
     FormsModule,
-    NgbRatingModule
+    NgbRatingModule,
+    MatIconModule,
+    MatAutocompleteModule,
+    MatSnackBarModule,
+    MatTableModule
   ]
 })
 export class SharedModule { }

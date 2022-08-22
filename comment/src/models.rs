@@ -7,6 +7,7 @@ pub struct NewComment<'a> {
     pub comment:&'a str,
     pub user_id: i32,
     pub review_id: i32,
+    pub reports: i32,
 }
 
 #[derive(Debug, Queryable, AsChangeset)]
@@ -15,6 +16,7 @@ pub struct Comment {
     pub comment:String,
     pub user_id: i32,
     pub review_id: i32,
+    pub reports: i32,
 }
 
 pub fn map_comment_to_comment_request(comment_value:&Comment) -> CommentRequest{
@@ -23,6 +25,7 @@ pub fn map_comment_to_comment_request(comment_value:&Comment) -> CommentRequest{
         comment: comment_value.comment.clone(),
         user_id: comment_value.user_id,
         review_id: comment_value.review_id,
+        reports: comment_value.reports,
     };
     return comment_request;
 }

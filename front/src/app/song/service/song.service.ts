@@ -34,5 +34,15 @@ export class SongService {
       `http://localhost:3000/song/${id}`,
     );
   }
-
+  getByMusician(id:string): Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/song/musician/${id}`,
+    );
+  }
+  submit(value: any) {
+    return this.http.post<any>('http://localhost:3000/song/', value, {
+      headers: this.headers,
+      responseType: 'json',
+    });
+  }
 }

@@ -13,21 +13,21 @@ export class RatingService {
   constructor(private http: HttpClient) {
    }
 
-   rate(rating:any): Observable<any> {
-    return this.http.post<any>('http://localhost:3000/rating/song', rating, {
+   rate(rating:any,type:any): Observable<any> {
+    return this.http.post<any>(`http://localhost:3000/rating/${type}`, rating, {
       headers: this.headers,
       responseType: 'json',
     });
   }
-  getUserRating(songId: string):Observable<any> {
+  getUserRating(id: string,type:any):Observable<any> {
     return this.http.get<HttpResponse<any>>(
-      `http://localhost:3000/rating/user/song/${songId}`,
+      `http://localhost:3000/rating/user/${type}/${id}`,
     );
   }
 
-  getAllSongRatings(songId: string):Observable<any> {
+  getAllSongRatings(id: string,type:any):Observable<any> {
     return this.http.get<HttpResponse<any>>(
-      `http://localhost:3000/rating/song/${songId}`,
+      `http://localhost:3000/rating/${type}/${id}`,
     );
   }
 }

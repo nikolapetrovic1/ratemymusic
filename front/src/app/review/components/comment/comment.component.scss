@@ -1,0 +1,10 @@
+.container{
+    display: grid;
+    grid-template-columns: minmax(500px,80%) 1fr  ;
+}
+
+
+
+.icon{
+    margin-top: 50;
+}

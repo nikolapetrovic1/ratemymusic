@@ -1,0 +1,16 @@
+.review-text {
+    min-width: 150px;
+    max-width: 600px;
+    width: 100%;
+  }
+
+  .container{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    max-width: 600px;
+
+  }
+  .submit{
+    align-self: flex-end;
+  }

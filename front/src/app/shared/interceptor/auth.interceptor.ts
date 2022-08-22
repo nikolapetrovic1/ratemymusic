@@ -23,8 +23,6 @@ export class AuthInterceptor implements HttpInterceptor {
           `Bearer ${decodedItem.accessToken}`
         ),
       });
-      console.log(cloned.headers)
-
       return next.handle(cloned);
     } else {
       return next.handle(req);

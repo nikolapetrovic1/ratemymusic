@@ -6,5 +6,5 @@ import {NgbConfig} from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'front';
+  title = 'Ratemymusic';
 }

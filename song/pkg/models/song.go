@@ -16,6 +16,6 @@ type Song struct {
 	CreatedAt time.Time      `json:"-"`
 	UpdatedAt time.Time      `json:"-"`
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
-	AlbumID   uint           `json:"album_id"`
+	AlbumID   int64          `json:"album_id"`
 	Genres    []Genre        `json:"genres" gorm:"many2many:song_genres;"`
 }

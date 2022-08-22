@@ -10,7 +10,6 @@ import (
 type CommentBody struct {
 	ID       int64  `json:"id"`
 	Comment  string `json:"comment"`
-	UserId   int32  `json:"user_id"`
 	ReviewId int32  `json:"review_id"`
 }
 
@@ -22,10 +21,9 @@ func Create(ctx *gin.Context, c pb.CommentsClient) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
 	res, err := c.CreateComment(context.Background(), &pb.CommentRequest{
 		Comment:  comment.Comment,
-		UserId:   comment.UserId,
+		UserId:   int32(ctx.GetInt64("userId")),
 		ReviewId: comment.ReviewId,
 	})
 

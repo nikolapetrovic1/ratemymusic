@@ -23,7 +23,7 @@ func Update(ctx *gin.Context, c pb.SongServiceClient) {
 		return
 	}
 
-	res, err := c.UpdateSong(context.Background(), &pb.SongRequest{
+	res, err := c.UpdateSong(context.Background(), &pb.SongData{
 		Id:         songRequest.Id,
 		Name:       songRequest.Name,
 		Duration:   songRequest.Duration,

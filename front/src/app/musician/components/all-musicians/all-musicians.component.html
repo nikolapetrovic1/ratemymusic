@@ -1,11 +1,13 @@
-<div class="search">
+<div class="container">
+  <div class="search">
 
     <mat-form-field appearance="outline">
-        <mat-label>Search musician</mat-label>
-        <input matInput type ="text" [(ngModel)]="query"  (keyup)="search($event)"/>
-      </mat-form-field>
-</div>
+      <mat-label>Search musician</mat-label>
+      <input matInput type="text" [(ngModel)]="query" (keyup)="search()" />
+    </mat-form-field>
+  </div>
 
-<div class="content">
-  <app-musician-card *ngFor="let musician of musicians" class="item" [musician] = "musician"></app-musician-card>
+  <div class="content">
+    <app-musician-card *ngFor="let musician of musicians" class="item" [musician]="musician"></app-musician-card>
+  </div>
 </div>

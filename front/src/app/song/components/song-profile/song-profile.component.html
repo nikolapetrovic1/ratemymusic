@@ -1,25 +1,21 @@
-<p>song-profile works!</p>
-<div class="rating">
-    <p>Rating :     <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
+<div class="containter" *ngIf="song && musician">
+    <div class="item">
+        <h2> <a href="/musician/{{musician.id}}">{{musician.name}}</a> - {{song.name}}</h2>
+        <div class="rating">
+            <p>Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
 
-        <ng-template let-fill="fill" let-index="index">
-            <span class="star" [class.filled]="fill === 100">&#9733;</span>
-            </ng-template>
-    </ngb-rating></p>
+                    <ng-template let-fill="fill" let-index="index">
+                        <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                    </ng-template>
+                </ngb-rating> ({{ratingValue.value}}/10)</p>
+        </div>
+        <div class="ratings">
+            <p>Average rating: <b>{{averageRating}}</b></p>
+        </div>
+        <div class="review">
+            <!-- <app-review type="song" [id]="songId"></app-review> -->
+            <h3>Reviews</h3>
+            <app-all-reviews [id]="songId" type="song"></app-all-reviews>
+        </div>
+    </div>
 </div>
-
-<div class="ratings">
-    <h2>All ratings</h2>
-    <ngb-rating *ngFor="let rating of ratings"   [(rate)]="rating.rating_value" [readonly]="true">
-
-        <ng-template let-fill="fill" let-index="index">
-            <span class="star" [class.filled]="fill === 100">&#9733;</span>
-            </ng-template>
-            
-        </ngb-rating>
-        
-</div>
-
-{{song|json}}
-{{ratings|json}}
-{{ratingValue.value|json}}

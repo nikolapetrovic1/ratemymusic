@@ -1,0 +1,18 @@
+<div class="container">
+
+    <div class="container" *ngIf="review">
+    <mat-form-field class="review-text" appearance="outline">
+        <mat-label>Write your review</mat-label>
+        <textarea matInput placeholder="Ex. This song is very good..." [(ngModel)]="review.text"></textarea>
+      </mat-form-field>
+    <button mat-raised-button color="primary" class="submit" (click)="submit()">Submit</button>
+  </div>
+
+  <!-- <div *ngIf="review">
+    <mat-form-field class="review-text" appearance="outline">
+      <mat-label>Your review</mat-label>
+      <textarea matInput class="submit" placeholder="Ex. This song is very good..." [(ngModel)]="review.text" readonly></textarea>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="submit" (click)="submit()">Edit</button>
+  </div> -->
+</div>

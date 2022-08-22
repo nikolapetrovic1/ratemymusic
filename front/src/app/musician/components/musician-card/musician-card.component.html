@@ -1,15 +1,13 @@
 <mat-card class="example-card">
     <mat-card-header>
-      <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{musician.musician_name}}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba22.jpg" alt="Photo of a Shiba Inu">
     <mat-card-content>
         <p>
             {{musician.name}} {{musician.surname}}
         </p>
     </mat-card-content>
     <mat-card-actions>
-      <button color="primary" mat-button>Go to page</button>
+      <button color="primary" mat-button (click)="musicianPage(musician.id)">Go to page</button>
     </mat-card-actions>
   </mat-card>

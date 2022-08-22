@@ -21,7 +21,7 @@ func RateAlbum(ctx *gin.Context, c pb.RatingServiceClient) {
 		ctx.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
+	rateAlbumBody.UserId = ctx.GetInt64("userId")
 	res, err := c.RateAlbum(context.Background(), &pb.RateRequest{
 		Id:          rateAlbumBody.Id,
 		RatingValue: rateAlbumBody.RatingValue,

@@ -11,3 +11,5 @@ proto:
 	protoc ./pkg/song/*.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative pkg/rating/*.proto
 
 	protoc ./pkg/song/*.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative pkg/comment/*.proto
+
+	protoc ./pkg/song/*.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative pkg/review/*.proto

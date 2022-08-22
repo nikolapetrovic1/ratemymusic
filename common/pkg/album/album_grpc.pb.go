@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AlbumServiceClient interface {
 	FindOne(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*BasicResponse, error)
-	FindByMusician(ctx context.Context, in *FindByMusicianRequest, opts ...grpc.CallOption) (*BasicResponse, error)
+	FindByMusician(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*FindAllResponse, error)
 	CreateAlbum(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error)
 	UpdateAlbum(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error)
 	DeleteAlbum(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
@@ -47,8 +47,8 @@ func (c *albumServiceClient) FindOne(ctx context.Context, in *IDRequest, opts ..
 	return out, nil
 }
 
-func (c *albumServiceClient) FindByMusician(ctx context.Context, in *FindByMusicianRequest, opts ...grpc.CallOption) (*BasicResponse, error) {
-	out := new(BasicResponse)
+func (c *albumServiceClient) FindByMusician(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*FindAllResponse, error) {
+	out := new(FindAllResponse)
 	err := c.cc.Invoke(ctx, "/album.AlbumService/FindByMusician", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func (c *albumServiceClient) SearchAlbum(ctx context.Context, in *SearchRequest,
 // for forward compatibility
 type AlbumServiceServer interface {
 	FindOne(context.Context, *IDRequest) (*BasicResponse, error)
-	FindByMusician(context.Context, *FindByMusicianRequest) (*BasicResponse, error)
+	FindByMusician(context.Context, *IDRequest) (*FindAllResponse, error)
 	CreateAlbum(context.Context, *AlbumData) (*BasicResponse, error)
 	UpdateAlbum(context.Context, *AlbumData) (*BasicResponse, error)
 	DeleteAlbum(context.Context, *IDRequest) (*DeleteResponse, error)
@@ -112,7 +112,7 @@ type UnimplementedAlbumServiceServer struct {
 func (UnimplementedAlbumServiceServer) FindOne(context.Context, *IDRequest) (*BasicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
-func (UnimplementedAlbumServiceServer) FindByMusician(context.Context, *FindByMusicianRequest) (*BasicResponse, error) {
+func (UnimplementedAlbumServiceServer) FindByMusician(context.Context, *IDRequest) (*FindAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindByMusician not implemented")
 }
 func (UnimplementedAlbumServiceServer) CreateAlbum(context.Context, *AlbumData) (*BasicResponse, error) {
@@ -159,7 +159,7 @@ func _AlbumService_FindOne_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _AlbumService_FindByMusician_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FindByMusicianRequest)
+	in := new(IDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -171,7 +171,7 @@ func _AlbumService_FindByMusician_Handler(srv interface{}, ctx context.Context, 
 		FullMethod: "/album.AlbumService/FindByMusician",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlbumServiceServer).FindByMusician(ctx, req.(*FindByMusicianRequest))
+		return srv.(AlbumServiceServer).FindByMusician(ctx, req.(*IDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

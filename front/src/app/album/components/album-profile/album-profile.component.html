@@ -1,0 +1,27 @@
+<div class="containter" *ngIf="album && musician">
+    <div class="item">
+        <h2><a href="/musician/{{musician.id}}">{{musician.name}}</a> - {{album.name}} </h2>
+        <div class="rating">
+            <p>Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateAlbum()">
+
+                    <ng-template let-fill="fill" let-index="index">
+                        <span class="star" [class.filled]="fill === 100">&#9733;</span>
+                    </ng-template>
+                </ngb-rating> ({{ratingValue.value}}/10)</p>
+        </div>
+        <div class="ratings">
+            <p>Average rating: <b>{{averageRating}}</b></p>
+        </div>
+        <div class="songs">
+            <h3>Songs</h3>
+
+            <p *ngFor="let song of songs; index as i">
+                {{i+1}}. <a href="/song/{{song.id}}">{{song.name}}</a> - {{song.duration*1000 | date:'mm:ss'}}
+            </p>
+        </div>
+        <div class="review">
+            <h3>Reviews</h3>
+            <app-all-reviews [id]="albumId" type="album"></app-all-reviews>
+        </div>
+    </div>
+</div>

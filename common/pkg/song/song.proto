@@ -8,8 +8,9 @@ option go_package = "./pkg/pb";
 service SongService{
   rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
   rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
-  rpc CreateSong(SongRequest) returns (CreateSongResponse){}
-  rpc UpdateSong(SongRequest) returns (CreateSongResponse){}
+  rpc FindByAlbum(IdRequest) returns (FindByMusicianResponse) {}
+  rpc CreateSong(SongData) returns (CreateSongResponse){}
+  rpc UpdateSong(SongData) returns (CreateSongResponse){}
   rpc DeleteSong(DeleteSongRequest) returns (CreateSongResponse){}
   rpc SearchSong(SearchRequest) returns (FindAllResponse) {}
 }
@@ -19,12 +20,15 @@ message Genre{
   string name = 1;
 }
 //CREATE
-message SongRequest{
+
+message SongData{
   int64 id = 1;
   string name = 2;
   int32 duration = 3;
   int64 musicianID = 4;
-  repeated Genre genres = 5;
+  int64 albumId = 5;
+  repeated Genre genres = 6;
+
 }
 
 message CreateSongResponse{
@@ -37,12 +41,10 @@ message DeleteSongRequest {
 }
 //FindAllByMusician
 
-message SongResponse{
-  int64 id = 1;
-  string name = 2;
-  int32 duration = 3;
-}
 
+message IdRequest{
+  int64 id = 1;
+}
 message FindByMusicianRequest{
   int64 id = 1;
 }
@@ -51,7 +53,7 @@ message FindByMusicianResponse{
   int64 id = 1;
   int64 status = 2;
   string error = 3;
-  repeated SongResponse songs = 4;
+  repeated SongData songs = 4;
 }
 
 // FindOne
@@ -66,13 +68,13 @@ message FindOneResponse{
 
   int64 status = 1;
   string error = 2;
-  FindOneData data = 3;
+  SongData data = 3;
 }
 
 message FindAllResponse{
   int64 status = 1;
   string error = 2;
-  repeated SongResponse songs = 3;
+  repeated SongData songs = 3;
 }
 message SearchRequest{
   string query = 1;

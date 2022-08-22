@@ -18,6 +18,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 
 	routes.GET("/:id", svc.FindOne)
 	routes.GET("/musician/:id", svc.FindByMusician)
+	routes.GET("/album/:id", svc.FindByAlbum)
 	routes.GET("/search", svc.Search)
 	routes.POST("/", svc.CreateSong)
 	routes.PUT("/", svc.UpdateSong)
@@ -31,6 +32,9 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
 	routes.FindOne(ctx, svc.Client)
+}
+func (svc *ServiceClient) FindByAlbum(ctx *gin.Context) {
+	routes.FindByAlbum(ctx, svc.Client)
 }
 
 func (svc *ServiceClient) FindByMusician(ctx *gin.Context) {

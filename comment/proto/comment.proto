@@ -7,12 +7,20 @@ option go_package = "./pkg/pb";
 service Comments{
     rpc CreateComment(CommentRequest) returns (CommentResponse) {};
     rpc UpdateComment(CommentRequest) returns (CommentResponse) {};
+    rpc ReportComment(ReportRequest) returns (CommentResponse) {};
+    rpc DeleteComment(IdRequest) returns (CommentResponse) {};
     rpc GetByReview(IdRequest) returns (AllCommentsResponse) {};
+    rpc GetAllByReportCount(IdRequest) returns (AllCommentsResponse) {}
 }
 message IdRequest{
     int32 id = 1;
 }
 
+message ReportRequest{
+
+    int32 id = 1;
+    int32 user_id = 2;
+}
 message AllCommentsResponse{
     repeated CommentRequest comments = 1;
 }
@@ -21,6 +29,7 @@ message CommentRequest {
     string comment = 2;
     int32 user_id = 3;
     int32 review_id = 4;
+    int32 reports = 5;
 }
 
 message CommentResponse {

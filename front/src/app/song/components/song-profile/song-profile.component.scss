@@ -2,19 +2,38 @@
     font-size: 1.5rem;
     color: #b0c4de;
   }
-  .filled {
-    color: #1e90ff;
-  }
-  .bad {
-    color: #deb0b0;
-  }
-  .filled.bad {
-    color: #ff1e1e;
-  }
+.filled {
+  color: #1e90ff;
+}
+.bad {
+  color: #deb0b0;
+}
+.filled.bad {
+  color: #ff1e1e;
+}
 
-  .ratings{
-    display:flex;
-    gap: 10px;
-    flex-direction: column;
-    justify-content: center;
-  }
+.ratings{
+  width: 600px;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+}
+.review{
+  width: 600px;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+}
+
+.containter{
+  display:flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+.item{
+  margin: 20px;
+}
+a{
+  text-decoration: none;
+}

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-card',
@@ -8,9 +9,11 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SongCardComponent implements OnInit {
 
   @Input() song: any;
-  constructor() { }
+  constructor(private router:Router) { }
 
   ngOnInit(): void {
   }
-
+  songPage(id:any){
+    this.router.navigate([`/song/${id}`]);
+  }
 }

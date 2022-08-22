@@ -33,7 +33,9 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 		svc.FindByUserAlbum)
 	routes.GET("song/:id", svc.FindBySong)
 	routes.GET("album/:id", svc.FindByAlbum)
-	routes.POST("album", svc.RateAlbum)
+	routes.POST("album", func(c *gin.Context) {
+		a.AuthRequired(c, []string{"USER"})
+	}, svc.RateAlbum)
 	routes.POST("song", func(c *gin.Context) {
 		a.AuthRequired(c, []string{"USER"})
 	}, svc.RateSong)

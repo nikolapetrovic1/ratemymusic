@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class MusicianService {
 
+
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
@@ -27,6 +28,18 @@ export class MusicianService {
       'http://localhost:3000/musician/search',
       queryParams
     );
+  }
+
+  getById(id:any): Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/musician/${id}`,
+    );
+  }
+  submit(value: any) {
+    return this.http.post<any>('http://localhost:3000/musician/', value, {
+      headers: this.headers,
+      responseType: 'json',
+    });
   }
 
 }

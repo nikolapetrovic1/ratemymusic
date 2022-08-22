@@ -9,6 +9,8 @@ type Config struct {
 	MusicianSvcUrl string `mapstructure:"MUSICIAN_SVC_URL"`
 	RatingSvcUrl   string `mapstructure:"RATING_SVC_URL"`
 	CommentSvcUrl  string `mapstructure:"COMMENT_SVC_URL"`
+	ReviewSvcUrl   string `mapstructure:"REVIEW_SVC_URL"`
+	AlbumSvcUrl    string `mapstructure:"ALBUM_SVC_URL"`
 }
 
 func LoadConfig() (c Config, err error) {

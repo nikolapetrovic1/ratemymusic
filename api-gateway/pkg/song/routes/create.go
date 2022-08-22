@@ -11,6 +11,7 @@ type SongRequestBody struct {
 	Name       string `json:"name"`
 	Duration   int32  `json:"duration"`
 	MusicianID int64  `json:"musician_id"`
+	AlbumId    int64  `json:"album_id"`
 }
 
 func Create(ctx *gin.Context, c pb.SongServiceClient) {
@@ -22,10 +23,12 @@ func Create(ctx *gin.Context, c pb.SongServiceClient) {
 		return
 	}
 
-	res, err := c.CreateSong(context.Background(), &pb.SongRequest{
+	res, err := c.CreateSong(context.Background(), &pb.SongData{
+		Id:         0,
 		Name:       songRequest.Name,
 		Duration:   songRequest.Duration,
 		MusicianID: songRequest.MusicianID,
+		AlbumId:    songRequest.AlbumId,
 	})
 
 	if err != nil {

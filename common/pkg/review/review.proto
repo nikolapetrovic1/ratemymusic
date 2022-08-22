@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package review;
+
+option go_package = "./pkg/pb";
+
+
+service ReviewService {
+  rpc FindByUser(IdRequest) returns (ReviewResponse) {}
+  rpc FindBySong(IdRequest) returns (ReviewResponse){}
+  rpc FindByAlbum(IdRequest) returns (ReviewResponse){}
+  rpc FindByUserSong(UserSongRequest) returns (ReviewData) {}
+  rpc FindByUserAlbum(UserAlbumRequest) returns (ReviewData) {}
+  rpc CreateReview(ReviewData) returns (ReviewData) {}
+}
+
+message ReviewResponse {
+  int64 status = 1;
+  string error = 2;
+  repeated ReviewData reviews = 3;
+}
+enum DataType{
+  album = 0;
+  song = 1;
+}
+message ReviewData{
+  int64 id = 1;
+  int64 user_id = 2;
+  int64 type_id = 3;
+  string text = 4;
+  string type = 5;
+
+}
+message IdRequest {
+  int64 id = 1;
+}
+
+message UserSongRequest{
+  int64 user_id = 1;
+  int64 song_id = 2;
+}
+message UserAlbumRequest{
+  int64 user_id = 1;
+  int64 album_id = 2;
+
+}

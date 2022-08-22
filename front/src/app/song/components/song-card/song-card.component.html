@@ -3,13 +3,13 @@
       <div mat-card-avatar class="example-header-image"></div>
       <mat-card-title>{{song.name}}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba22.jpg" alt="Photo of a Shiba Inu">
+    <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba22.jpg" alt="Photo of a Shiba Inu"> -->
     <mat-card-content>
         <p>
-            {{song.duration}}
+            Duration - {{song.duration*1000 | date:'mm:ss' }}
         </p>
     </mat-card-content>
     <mat-card-actions>
-      <button color="primary" mat-button>Go to page</button>
+      <button color="primary" (click) ="songPage(song.id)" mat-button>Song page</button>
     </mat-card-actions>
   </mat-card>
