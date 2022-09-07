@@ -18,4 +18,5 @@ type Song struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 	AlbumID   int64          `json:"album_id"`
 	Genres    []Genre        `json:"genres" gorm:"many2many:song_genres;"`
+	Audio     string         `json:"audio"`
 }

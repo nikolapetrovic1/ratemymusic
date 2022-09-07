@@ -1,6 +1,11 @@
 .containter{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-  }
+  display:flex;
+  
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+a{
+text-decoration: none;
+}

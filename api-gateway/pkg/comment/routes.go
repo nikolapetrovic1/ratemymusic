@@ -24,9 +24,13 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.GET("/delete/:id", svc.Delete)
 	routes.GET("/report/all", svc.GetAllByReportCount)
 	routes.GET("/report/:id", svc.Report)
+	routes.GET("/user/:id", svc.FindByUser)
 
 }
 
+func (svc *ServiceClient) FindByUser(ctx *gin.Context) {
+	routes.FindByUser(ctx, svc.Client)
+}
 func (svc *ServiceClient) GetAllByReportCount(ctx *gin.Context) {
 	routes.GetAllByReportCount(ctx, svc.Client)
 }

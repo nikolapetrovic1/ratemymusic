@@ -9,6 +9,8 @@ export class SongService {
 
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+  private audio_headers = new HttpHeaders({ 'Content-Type': 'audio/mpeg',
+  Accept: "application/octet-stream"});
 
 
   constructor(private http: HttpClient) {
@@ -44,5 +46,12 @@ export class SongService {
       headers: this.headers,
       responseType: 'json',
     });
+  }
+  streamSong(): Observable<any>{
+    return this.http.get<any>(
+      `http://localhost:3000/song/stream`, {
+        headers: this.audio_headers
+      }
+    );
   }
 }

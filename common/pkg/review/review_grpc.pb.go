@@ -28,6 +28,8 @@ type ReviewServiceClient interface {
 	FindByUserSong(ctx context.Context, in *UserSongRequest, opts ...grpc.CallOption) (*ReviewData, error)
 	FindByUserAlbum(ctx context.Context, in *UserAlbumRequest, opts ...grpc.CallOption) (*ReviewData, error)
 	CreateReview(ctx context.Context, in *ReviewData, opts ...grpc.CallOption) (*ReviewData, error)
+	Update(ctx context.Context, in *ReviewData, opts ...grpc.CallOption) (*ReviewData, error)
+	Delete(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*ReviewData, error)
 }
 
 type reviewServiceClient struct {
@@ -92,6 +94,24 @@ func (c *reviewServiceClient) CreateReview(ctx context.Context, in *ReviewData, 
 	return out, nil
 }
 
+func (c *reviewServiceClient) Update(ctx context.Context, in *ReviewData, opts ...grpc.CallOption) (*ReviewData, error) {
+	out := new(ReviewData)
+	err := c.cc.Invoke(ctx, "/review.ReviewService/Update", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *reviewServiceClient) Delete(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*ReviewData, error) {
+	out := new(ReviewData)
+	err := c.cc.Invoke(ctx, "/review.ReviewService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReviewServiceServer is the server API for ReviewService service.
 // All implementations must embed UnimplementedReviewServiceServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type ReviewServiceServer interface {
 	FindByUserSong(context.Context, *UserSongRequest) (*ReviewData, error)
 	FindByUserAlbum(context.Context, *UserAlbumRequest) (*ReviewData, error)
 	CreateReview(context.Context, *ReviewData) (*ReviewData, error)
+	Update(context.Context, *ReviewData) (*ReviewData, error)
+	Delete(context.Context, *IdRequest) (*ReviewData, error)
 	mustEmbedUnimplementedReviewServiceServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedReviewServiceServer) FindByUserAlbum(context.Context, *UserAl
 }
 func (UnimplementedReviewServiceServer) CreateReview(context.Context, *ReviewData) (*ReviewData, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateReview not implemented")
+}
+func (UnimplementedReviewServiceServer) Update(context.Context, *ReviewData) (*ReviewData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
+}
+func (UnimplementedReviewServiceServer) Delete(context.Context, *IdRequest) (*ReviewData, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedReviewServiceServer) mustEmbedUnimplementedReviewServiceServer() {}
 
@@ -248,6 +276,42 @@ func _ReviewService_CreateReview_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReviewService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReviewData)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).Update(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/review.ReviewService/Update",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).Update(ctx, req.(*ReviewData))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReviewService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReviewServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/review.ReviewService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReviewServiceServer).Delete(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReviewService_ServiceDesc is the grpc.ServiceDesc for ReviewService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var ReviewService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateReview",
 			Handler:    _ReviewService_CreateReview_Handler,
+		},
+		{
+			MethodName: "Update",
+			Handler:    _ReviewService_Update_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _ReviewService_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

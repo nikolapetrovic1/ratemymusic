@@ -25,8 +25,8 @@ type AlbumServiceClient interface {
 	FindOne(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*BasicResponse, error)
 	FindByMusician(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*FindAllResponse, error)
 	CreateAlbum(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error)
-	UpdateAlbum(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error)
-	DeleteAlbum(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	Update(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error)
+	Delete(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*BasicResponse, error)
 	SearchAlbum(ctx context.Context, in *SearchRequest, opts ...grpc.CallOption) (*FindAllResponse, error)
 }
 
@@ -65,18 +65,18 @@ func (c *albumServiceClient) CreateAlbum(ctx context.Context, in *AlbumData, opt
 	return out, nil
 }
 
-func (c *albumServiceClient) UpdateAlbum(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error) {
+func (c *albumServiceClient) Update(ctx context.Context, in *AlbumData, opts ...grpc.CallOption) (*BasicResponse, error) {
 	out := new(BasicResponse)
-	err := c.cc.Invoke(ctx, "/album.AlbumService/UpdateAlbum", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/album.AlbumService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *albumServiceClient) DeleteAlbum(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
-	out := new(DeleteResponse)
-	err := c.cc.Invoke(ctx, "/album.AlbumService/DeleteAlbum", in, out, opts...)
+func (c *albumServiceClient) Delete(ctx context.Context, in *IDRequest, opts ...grpc.CallOption) (*BasicResponse, error) {
+	out := new(BasicResponse)
+	err := c.cc.Invoke(ctx, "/album.AlbumService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -99,8 +99,8 @@ type AlbumServiceServer interface {
 	FindOne(context.Context, *IDRequest) (*BasicResponse, error)
 	FindByMusician(context.Context, *IDRequest) (*FindAllResponse, error)
 	CreateAlbum(context.Context, *AlbumData) (*BasicResponse, error)
-	UpdateAlbum(context.Context, *AlbumData) (*BasicResponse, error)
-	DeleteAlbum(context.Context, *IDRequest) (*DeleteResponse, error)
+	Update(context.Context, *AlbumData) (*BasicResponse, error)
+	Delete(context.Context, *IDRequest) (*BasicResponse, error)
 	SearchAlbum(context.Context, *SearchRequest) (*FindAllResponse, error)
 	mustEmbedUnimplementedAlbumServiceServer()
 }
@@ -118,11 +118,11 @@ func (UnimplementedAlbumServiceServer) FindByMusician(context.Context, *IDReques
 func (UnimplementedAlbumServiceServer) CreateAlbum(context.Context, *AlbumData) (*BasicResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAlbum not implemented")
 }
-func (UnimplementedAlbumServiceServer) UpdateAlbum(context.Context, *AlbumData) (*BasicResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateAlbum not implemented")
+func (UnimplementedAlbumServiceServer) Update(context.Context, *AlbumData) (*BasicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Update not implemented")
 }
-func (UnimplementedAlbumServiceServer) DeleteAlbum(context.Context, *IDRequest) (*DeleteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteAlbum not implemented")
+func (UnimplementedAlbumServiceServer) Delete(context.Context, *IDRequest) (*BasicResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedAlbumServiceServer) SearchAlbum(context.Context, *SearchRequest) (*FindAllResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SearchAlbum not implemented")
@@ -194,38 +194,38 @@ func _AlbumService_CreateAlbum_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AlbumService_UpdateAlbum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlbumService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AlbumData)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlbumServiceServer).UpdateAlbum(ctx, in)
+		return srv.(AlbumServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/album.AlbumService/UpdateAlbum",
+		FullMethod: "/album.AlbumService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlbumServiceServer).UpdateAlbum(ctx, req.(*AlbumData))
+		return srv.(AlbumServiceServer).Update(ctx, req.(*AlbumData))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AlbumService_DeleteAlbum_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _AlbumService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(IDRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AlbumServiceServer).DeleteAlbum(ctx, in)
+		return srv.(AlbumServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/album.AlbumService/DeleteAlbum",
+		FullMethod: "/album.AlbumService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AlbumServiceServer).DeleteAlbum(ctx, req.(*IDRequest))
+		return srv.(AlbumServiceServer).Delete(ctx, req.(*IDRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -268,12 +268,12 @@ var AlbumService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AlbumService_CreateAlbum_Handler,
 		},
 		{
-			MethodName: "UpdateAlbum",
-			Handler:    _AlbumService_UpdateAlbum_Handler,
+			MethodName: "Update",
+			Handler:    _AlbumService_Update_Handler,
 		},
 		{
-			MethodName: "DeleteAlbum",
-			Handler:    _AlbumService_DeleteAlbum_Handler,
+			MethodName: "Delete",
+			Handler:    _AlbumService_Delete_Handler,
 		},
 		{
 			MethodName: "SearchAlbum",

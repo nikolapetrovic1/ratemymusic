@@ -7,7 +7,6 @@ import { Token } from '@angular/compiler';
 })
 export class AuthService {
 
-
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
@@ -40,6 +39,27 @@ export class AuthService {
   loadUserInfo(id: any):Observable<any>{
     return this.http.get<HttpResponse<any>>(
       `http://localhost:3000/auth/${id}`,
+    );
+  }
+  all():Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/auth/all`,
+    );
+  }
+
+  banUser(id: any):Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/auth/ban/${id}`,
+    );
+  }
+  unBanUser(id: any):Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/auth/unban/${id}`,
+    );
+  }
+  delete(id:any):Observable<any>{
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/auth/delete/${id}`,
     );
   }
 }

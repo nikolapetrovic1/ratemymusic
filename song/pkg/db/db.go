@@ -19,7 +19,7 @@ func Init(url string) Handler {
 		log.Fatalln(err)
 	}
 
-	db.AutoMigrate(&models.Song{}, &models.Album{}, models.Genre{})
+	db.AutoMigrate(&models.Song{}, models.Genre{})
 	db.Create(&models.Genre{Name: "Rock"})
 	db.Create(&models.Genre{Name: "Hip-Hop"})
 	return Handler{db}

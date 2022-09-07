@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class RatingService {
 
+
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
@@ -28,6 +29,11 @@ export class RatingService {
   getAllSongRatings(id: string,type:any):Observable<any> {
     return this.http.get<HttpResponse<any>>(
       `http://localhost:3000/rating/${type}/${id}`,
+    );
+  }
+  findByUser(id: any):Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/rating/user/${id}`,
     );
   }
 }

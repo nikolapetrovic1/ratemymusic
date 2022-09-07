@@ -12,6 +12,8 @@ service ReviewService {
   rpc FindByUserSong(UserSongRequest) returns (ReviewData) {}
   rpc FindByUserAlbum(UserAlbumRequest) returns (ReviewData) {}
   rpc CreateReview(ReviewData) returns (ReviewData) {}
+  rpc Update(ReviewData) returns (ReviewData) {}
+  rpc Delete(IdRequest) returns (ReviewData) {}
 }
 
 message ReviewResponse {

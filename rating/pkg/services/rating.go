@@ -104,7 +104,17 @@ func (s Server) RateAlbum(context context.Context, request *pb.RateRequest) (*pb
 		Status: http.StatusOK,
 	}, nil
 }
-
+func (s *Server) Delete(context context.Context, request *pb.DeleteRequest) (*pb.RatingResponse, error) {
+	if request.Type == "song" {
+		s.Repo.DB.Delete(&models.SongRating{}, request.Id)
+	}
+	if request.Type == "album" {
+		s.Repo.DB.Delete(&models.AlbumRating{}, request.Id)
+	}
+	return &pb.RatingResponse{
+		Status: http.StatusCreated,
+	}, nil
+}
 func (s Server) FindByUserAlbum(context context.Context, request *pb.UserAlbumRequest) (*pb.RatingData, error) {
 	var rating models.AlbumRating
 	if result := s.Repo.DB.Where(&models.AlbumRating{UserID: request.UserId, AlbumId: request.AlbumId}).Find(&rating); result.Error != nil {

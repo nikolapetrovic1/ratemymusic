@@ -33,8 +33,11 @@ export class CreateSongComponent implements OnInit {
   }
 
   submit(){
+    if(this.form.value.album_id === '') {
+      this.form.value.album_id = 0
+    }
     this.songService.submit(this.form.value).subscribe((res)=>{
-      console.log(res)
+      
     })
   }
   loadMusicians(){

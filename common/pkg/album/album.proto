@@ -10,8 +10,8 @@ service AlbumService{
   rpc FindOne(IDRequest) returns (BasicResponse) {}
   rpc FindByMusician(IDRequest) returns (FindAllResponse) {}
   rpc CreateAlbum(AlbumData) returns (BasicResponse){}
-  rpc UpdateAlbum(AlbumData) returns (BasicResponse){}
-  rpc DeleteAlbum(IDRequest) returns (DeleteResponse){}
+  rpc Update(AlbumData) returns (BasicResponse){}
+  rpc Delete(IDRequest) returns (BasicResponse){}
   rpc SearchAlbum(SearchRequest) returns (FindAllResponse) {}
 }
 

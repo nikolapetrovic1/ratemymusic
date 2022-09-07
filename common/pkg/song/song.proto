@@ -6,6 +6,7 @@ option go_package = "./pkg/pb";
 
 
 service SongService{
+  rpc StreamSong(FindOneRequest) returns (stream AudioSample);
   rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
   rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
   rpc FindByAlbum(IdRequest) returns (FindByMusicianResponse) {}
@@ -15,6 +16,10 @@ service SongService{
   rpc SearchSong(SearchRequest) returns (FindAllResponse) {}
 }
 
+message AudioSample {
+  string Timestamp = 1;
+  bytes Data = 2;
+}
 
 message Genre{
   string name = 1;
@@ -28,7 +33,6 @@ message SongData{
   int64 musicianID = 4;
   int64 albumId = 5;
   repeated Genre genres = 6;
-
 }
 
 message CreateSongResponse{
@@ -56,11 +60,6 @@ message FindByMusicianResponse{
   repeated SongData songs = 4;
 }
 
-// FindOne
-message FindOneData {
-  int64 id = 1;
-  string name = 2;
-}
 
 message FindOneRequest { int64 id = 1; }
 

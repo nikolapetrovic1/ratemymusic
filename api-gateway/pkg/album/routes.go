@@ -21,11 +21,14 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.GET("/:id", svc.FindById)
 	routes.GET("/search", svc.Search)
 	routes.POST("/", svc.Create)
-	//routes.PUT("/", svc.UpdateSong)
-	//routes.DELETE("/:id", svc.DeleteSong)
+	routes.PUT("/", svc.Update)
+	routes.DELETE("/:id", svc.Delete)
 
 }
 
+func (svc *ServiceClient) Update(ctx *gin.Context) {
+	routes.Update(ctx, svc.Client)
+}
 func (svc *ServiceClient) Create(ctx *gin.Context) {
 	routes.Create(ctx, svc.Client)
 }
@@ -37,4 +40,8 @@ func (svc *ServiceClient) FindById(ctx *gin.Context) {
 }
 func (svc *ServiceClient) Search(ctx *gin.Context) {
 	routes.Search(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) Delete(ctx *gin.Context) {
+	routes.Delete(ctx, svc.Client)
 }

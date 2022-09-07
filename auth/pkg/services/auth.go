@@ -7,6 +7,7 @@ import (
 	"github.com/nikolapetrovic1/ratemymusic/auth/pkg/models"
 	"github.com/nikolapetrovic1/ratemymusic/auth/pkg/utils"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/auth"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"net/http"
 )
 
@@ -45,7 +46,12 @@ func (s *Server) Login(_ context.Context, req *pb.LoginRequest) (*pb.LoginRespon
 			Error:  "User not found",
 		}, nil
 	}
-
+	if user.Banned {
+		return &pb.LoginResponse{
+			Status: http.StatusBadRequest,
+			Error:  "User banned",
+		}, nil
+	}
 	match := utils.CheckPasswordHash(req.Password, user.Password)
 
 	if !match {
@@ -89,6 +95,12 @@ func (s *Server) Validate(_ context.Context, req *pb.ValidateRequest) (*pb.Valid
 			Error:  "user does not have needed role",
 		}, nil
 	}
+	if user.Banned {
+		return &pb.ValidateResponse{
+			Status: http.StatusBadRequest,
+			Error:  "User banned",
+		}, nil
+	}
 	return &pb.ValidateResponse{
 		Status: http.StatusOK,
 		UserId: user.Id,
@@ -112,4 +124,42 @@ func (s *Server) FindById(context context.Context, request *pb.IdRequest) (*pb.U
 		Id:    user.Id,
 		Email: user.Email,
 	}, nil
+}
+
+func (s *Server) GetAll(context context.Context, req *emptypb.Empty) (*pb.AllUsersResponse, error) {
+	var users []models.User
+
+	s.H.DB.Where("role = ?", "USER").Find(&users)
+	return &pb.AllUsersResponse{
+		Users: mapUserListToUserInfo(users),
+	}, nil
+}
+
+func (s *Server) BanUser(context context.Context, request *pb.BanRequest) (*pb.AllUsersResponse, error) {
+
+	s.H.DB.Model(&models.User{}).Where("id = ?", request.Id).Update("banned", request.Banned)
+	return s.GetAll(context, &emptypb.Empty{})
+}
+func (s *Server) Delete(context context.Context, request *pb.IdRequest) (*pb.ValidateResponse, error) {
+	s.H.DB.Delete(&models.User{}, request.Id)
+	return &pb.ValidateResponse{
+		Status: http.StatusAccepted,
+		UserId: request.Id,
+	}, nil
+}
+
+func (s *Server) Update(context context.Context, request *pb.EmailUpdateRequest) (*pb.UserInfoResponse, error) {
+	s.H.DB.Model(&models.User{}).Where("email = ?", request.Email).Update("email", request.NewEmail)
+	return &pb.UserInfoResponse{}, nil
+}
+func mapUserListToUserInfo(users []models.User) []*pb.UserInfoResponse {
+	var userInfo []*pb.UserInfoResponse
+	for _, user := range users {
+		userInfo = append(userInfo, &pb.UserInfoResponse{
+			Id:     user.Id,
+			Email:  user.Email,
+			Banned: user.Banned,
+		})
+	}
+	return userInfo
 }

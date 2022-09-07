@@ -1,14 +1,22 @@
 <mat-toolbar color="primary">
 
+
     <span>My App</span>
     <span class="example-spacer"></span>
+    <div class="routes">
     <a href="/musician">
       Musicians 
     </a>
-    <button (click)="logout()">
-      logout
+    <a href="/song">
+      Songs 
+    </a>
+    <a href="/album">
+      Albums 
+    </a>
+    <button mat-raised-button color = "primary" (click)="logout()" *ngIf="loggedIn">logout
     </button>
-    <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
-      Albums
-    </button> -->
+    <button mat-raised-button color = "primary" (click)="logout()" *ngIf="!loggedIn">
+      login
+    </button>
+  </div>
 </mat-toolbar>

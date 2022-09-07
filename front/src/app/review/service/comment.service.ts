@@ -38,4 +38,8 @@ export class CommentService {
   deleteComment(id: any): Observable<any> {
     return this.http.get<any>(`http://localhost:3000/comment/delete/${id}`)
   }
+  getByUser(id: any) {
+    return this.http.get<any>(`http://localhost:3000/comment/user/${id}`)
+  }
+
 }

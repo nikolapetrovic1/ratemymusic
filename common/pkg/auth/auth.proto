@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 package auth;
 
 option go_package = "./pkg/pb";
@@ -9,8 +10,20 @@ service AuthService {
   rpc Login(LoginRequest) returns (LoginResponse) {}
   rpc Validate(ValidateRequest) returns (ValidateResponse) {}
   rpc FindById(IdRequest) returns (UserInfoResponse) {}
+  rpc Update(EmailUpdateRequest) returns (UserInfoResponse) {}
+  rpc Delete(IdRequest) returns (ValidateResponse) {}
+  rpc GetAll(google.protobuf.Empty) returns (AllUsersResponse) {}
+  rpc BanUser(BanRequest) returns (AllUsersResponse) {}
 }
 
+message EmailUpdateRequest{
+  string email = 1;
+  string new_email = 2;
+}
+message BanRequest{
+  int64 id = 1;
+  bool banned = 2;
+}
 // Register
 
 message RegisterRequest {
@@ -39,7 +52,8 @@ message LoginResponse {
 
 // Validate
 
-message ValidateRequest { string accessToken = 1;
+message ValidateRequest {
+  string accessToken = 1;
   repeated string roles = 2;
 }
 
@@ -52,7 +66,12 @@ message ValidateResponse {
 message IdRequest{
   int64 id = 1;
 }
+
+message AllUsersResponse{
+  repeated UserInfoResponse users = 1;
+}
 message UserInfoResponse{
   int64 id = 1;
   string email = 2;
+  bool banned = 3;
 }

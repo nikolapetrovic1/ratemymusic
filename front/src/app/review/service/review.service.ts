@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 export class ReviewService {
 
 
+
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
@@ -29,6 +30,10 @@ export class ReviewService {
       headers: this.headers,
     });
    }
-
+   findByUser(id: any):Observable<any> {
+    return this.http.get<HttpResponse<any>>(
+      `http://localhost:3000/review/user/${id}`,
+    );
+  }
 
 }

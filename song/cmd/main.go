@@ -13,6 +13,7 @@ import (
 )
 
 func main() {
+
 	c, err := config.LoadConfig()
 
 	if err != nil {
@@ -40,4 +41,5 @@ func main() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalln("Failed to serve:", err)
 	}
+
 }

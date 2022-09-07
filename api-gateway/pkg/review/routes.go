@@ -7,13 +7,6 @@ import (
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/review/routes"
 )
 
-//FindByUser(context.Context, *IdRequest) (*ReviewResponse, error)
-//FindBySong(context.Context, *IdRequest) (*ReviewResponse, error)
-//FindByAlbum(context.Context, *IdRequest) (*ReviewResponse, error)
-//FindByUserSong(context.Context, *UserSongRequest) (*ReviewData, error)
-//FindByUserAlbum(context.Context, *UserAlbumRequest) (*ReviewData, error)
-//CreateReview(context.Context, *ReviewData) (*ReviewData, error)
-
 func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient) {
 	a := auth.InitAuthMiddleware(authSvc)
 
@@ -30,6 +23,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 		svc.CreateReview)
 	routes.GET("/song/:id", svc.FindBySong)
 	routes.GET("/album/:id", svc.FindByAlbum)
+	routes.GET("/user/:id", svc.FindByUserParam)
 	routes.GET("/user",
 		func(c *gin.Context) {
 			a.AuthRequired(c, []string{"USER"})
@@ -44,6 +38,9 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 		}, svc.FindByUserAlbum)
 }
 
+func (svc *ServiceClient) FindByUserParam(ctx *gin.Context) {
+	routes.FindByUserParam(ctx, svc.Client)
+}
 func (svc *ServiceClient) CreateReview(ctx *gin.Context) {
 	routes.CreateReview(ctx, svc.Client)
 }

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { RatingService } from '../../service/rating.service';
 import { MusicianService } from 'src/app/musician/service/musician.service';
+import { AuthService } from 'src/app/auth/service/auth.service';
 @Component({
   selector: 'app-song-profile',
   templateUrl: './song-profile.component.html',
@@ -18,11 +19,16 @@ export class SongProfileComponent implements OnInit {
   musician!: any;
 
 
-  constructor(private router: ActivatedRoute,private songService:SongService,private ratingService:RatingService,private musicianService:MusicianService) { }
+  constructor(private router: ActivatedRoute,
+    private songService:SongService,
+    private ratingService:RatingService,
+    private musicianService:MusicianService,
+    private authService:AuthService) { }
 
   ngOnInit(): void {
     this.songId = JSON.parse(this.router.snapshot.paramMap.get('id')!);
     this.loadRatings();
+    console.log(this.isLoggedIn());
   }
   
   getAllSongRatings(songId:string){
@@ -35,8 +41,7 @@ export class SongProfileComponent implements OnInit {
     })
   }
   getUserRating(songId:string){
-    this.
-    ratingService.getUserRating(songId,'song').subscribe((res)=>{
+    this.ratingService.getUserRating(songId,'song').subscribe((res)=>{
       this.ratingValue.setValue(res.rating_value);
     })
   }
@@ -71,5 +76,8 @@ export class SongProfileComponent implements OnInit {
     this.averageRating = 0;
     this.ratings.forEach((rating: { rating_value: number; }) => { this.averageRating += rating.rating_value });
     this.averageRating = this.averageRating/this.ratings.length
+  }
+  isLoggedIn(){
+    return this.authService.isLoggedIn();
   }
 }

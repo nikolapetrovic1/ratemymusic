@@ -1,10 +1,19 @@
 package utils
 
 import (
+	"fmt"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/models"
+	"io/ioutil"
 )
 
+func LoadAudio(path string) []byte {
+	buf, err := ioutil.ReadFile(path)
+	if err != nil {
+		fmt.Println(err)
+	}
+	return buf
+}
 func MapListSongResponse(songs []models.Song) []*pb.SongData {
 	var songResponse []*pb.SongData
 	for _, song := range songs {

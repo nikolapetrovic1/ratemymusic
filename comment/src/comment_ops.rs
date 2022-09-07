@@ -82,3 +82,14 @@ pub fn get_all_by_report_count() -> Vec<Comment>{
     .expect("Error loading comments");
     return results;
 }
+
+pub fn get_by_user(id_value:i32) -> Vec<Comment> {
+    use crate::schema::comments::dsl::*;
+
+    let connection = establish_connection();
+
+    let results = comments.filter(user_id.eq(id_value))
+    .load::<Comment>(&connection)
+    .expect("Error loading comments");
+    return results;
+}

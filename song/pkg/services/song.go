@@ -17,8 +17,20 @@ type Server struct {
 	MusicianSvc client.MusicianServiceClient
 }
 
-func (s *Server) FindOne(ctx context.Context, request *pb.FindOneRequest) (*pb.FindOneResponse, error) {
+func (s *Server) StreamSong(request *pb.FindOneRequest, stream pb.SongService_StreamSongServer) error {
+	var song models.Song
+	s.Repo.DB.First(&song, request.Id)
 
+	sample := &pb.AudioSample{
+		Timestamp: "",
+		Data:      utils.LoadAudio(song.Audio),
+	}
+	if err := stream.SendMsg(sample); err != nil {
+		return err
+	}
+	return nil
+}
+func (s *Server) FindOne(_ context.Context, request *pb.FindOneRequest) (*pb.FindOneResponse, error) {
 	var song models.Song
 
 	if result := s.Repo.DB.First(&song, request.Id); result.Error != nil {
@@ -56,7 +68,8 @@ func (s *Server) FindByMusician(context context.Context, request *pb.FindByMusic
 	}, nil
 }
 
-func (s *Server) CreateSong(context context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
+func (s *Server) CreateSong(_ context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
+
 	var song models.Song
 
 	song = utils.MapSongRequestSong(songRequest)
@@ -67,15 +80,17 @@ func (s *Server) CreateSong(context context.Context, songRequest *pb.SongData) (
 	}, nil
 }
 
-func (s *Server) UpdateSong(context context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
-	s.Repo.DB.Save(utils.MapSongRequestSong(songRequest))
+func (s *Server) UpdateSong(_ context.Context, songRequest *pb.SongData) (*pb.CreateSongResponse, error) {
+	var song models.Song
+	song = utils.MapSongRequestSong(songRequest)
+	s.Repo.DB.Save(&song)
 
 	return &pb.CreateSongResponse{
 		Status: http.StatusCreated,
 	}, nil
 }
 
-func (s *Server) DeleteSong(context context.Context, deleteRequest *pb.DeleteSongRequest) (*pb.CreateSongResponse, error) {
+func (s *Server) DeleteSong(_ context.Context, deleteRequest *pb.DeleteSongRequest) (*pb.CreateSongResponse, error) {
 	s.Repo.DB.Delete(&models.Song{}, deleteRequest.Id)
 
 	return &pb.CreateSongResponse{
@@ -83,14 +98,14 @@ func (s *Server) DeleteSong(context context.Context, deleteRequest *pb.DeleteSon
 	}, nil
 }
 
-func (s *Server) SearchSong(context context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
+func (s *Server) SearchSong(_ context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
 	return &pb.FindAllResponse{
 		Status: http.StatusOK,
 		Songs:  utils.MapListSongResponse(s.Repo.SearchSongs(request.Query)),
 	}, nil
 }
 
-func (s *Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*pb.FindByMusicianResponse, error) {
+func (s *Server) FindByAlbum(_ context.Context, request *pb.IdRequest) (*pb.FindByMusicianResponse, error) {
 	var songs []models.Song
 	if result := s.Repo.DB.Where(&models.Song{AlbumID: request.Id}).Find(&songs); result.Error != nil {
 		return &pb.FindByMusicianResponse{
@@ -103,4 +118,9 @@ func (s *Server) FindByAlbum(context context.Context, request *pb.IdRequest) (*p
 		Songs:  utils.MapListSongResponse(songs),
 		Id:     request.Id,
 	}, nil
+}
+
+func (s *Server) MusicianExists(id int64) error {
+	_, err := s.MusicianSvc.FindOne(id)
+	return err
 }

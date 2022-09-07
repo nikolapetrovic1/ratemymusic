@@ -9,12 +9,14 @@ import { SongProfileComponent } from './components/song-profile/song-profile.com
 import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReviewModule } from '../review/review.module';
 import { CreateSongComponent } from './components/create-song/create-song.component';
+import { SongPlayerComponent } from './components/song-player/song-player.component';
 @NgModule({
   declarations: [
     AllSongsComponent,
     SongCardComponent,
     SongProfileComponent,
     CreateSongComponent,
+    SongPlayerComponent,
     
   ],
   imports: [

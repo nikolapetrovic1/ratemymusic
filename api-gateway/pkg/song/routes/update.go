@@ -12,6 +12,7 @@ type SongUpdateBody struct {
 	Name       string `json:"name"`
 	Duration   int32  `json:"duration"`
 	MusicianID int64  `json:"musician_id"`
+	AlbumId    int64  `json:"album_id"`
 }
 
 func Update(ctx *gin.Context, c pb.SongServiceClient) {
@@ -28,6 +29,7 @@ func Update(ctx *gin.Context, c pb.SongServiceClient) {
 		Name:       songRequest.Name,
 		Duration:   songRequest.Duration,
 		MusicianID: songRequest.MusicianID,
+		AlbumId:    songRequest.AlbumId,
 	})
 
 	if err != nil {

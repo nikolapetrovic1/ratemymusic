@@ -98,6 +98,12 @@ func (s Server) CreateReview(context context.Context, request *pb.ReviewData) (*
 	return request, nil
 }
 
+func (s *Server) Delete(context context.Context, request *pb.IdRequest) (*pb.ReviewData, error) {
+	s.Repo.DB.Delete(&models.Review{}, request.Id)
+
+	return &pb.ReviewData{}, nil
+}
+
 func (s Server) checkIfReviewExists(Type string, userId int64, typeId int64) bool {
 	if Type == "song" {
 		review, _ := s.FindByUserSong(nil, &pb.UserSongRequest{

@@ -29,6 +29,7 @@ type RatingServiceClient interface {
 	FindByUserAlbum(ctx context.Context, in *UserAlbumRequest, opts ...grpc.CallOption) (*RatingData, error)
 	RateSong(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
 	RateAlbum(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*RatingResponse, error)
 }
 
 type ratingServiceClient struct {
@@ -102,6 +103,15 @@ func (c *ratingServiceClient) RateAlbum(ctx context.Context, in *RateRequest, op
 	return out, nil
 }
 
+func (c *ratingServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*RatingResponse, error) {
+	out := new(RatingResponse)
+	err := c.cc.Invoke(ctx, "/rating.RatingService/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RatingServiceServer is the server API for RatingService service.
 // All implementations must embed UnimplementedRatingServiceServer
 // for forward compatibility
@@ -113,6 +123,7 @@ type RatingServiceServer interface {
 	FindByUserAlbum(context.Context, *UserAlbumRequest) (*RatingData, error)
 	RateSong(context.Context, *RateRequest) (*RateResponse, error)
 	RateAlbum(context.Context, *RateRequest) (*RateResponse, error)
+	Delete(context.Context, *DeleteRequest) (*RatingResponse, error)
 	mustEmbedUnimplementedRatingServiceServer()
 }
 
@@ -140,6 +151,9 @@ func (UnimplementedRatingServiceServer) RateSong(context.Context, *RateRequest) 
 }
 func (UnimplementedRatingServiceServer) RateAlbum(context.Context, *RateRequest) (*RateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RateAlbum not implemented")
+}
+func (UnimplementedRatingServiceServer) Delete(context.Context, *DeleteRequest) (*RatingResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
 }
 func (UnimplementedRatingServiceServer) mustEmbedUnimplementedRatingServiceServer() {}
 
@@ -280,6 +294,24 @@ func _RatingService_RateAlbum_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RatingService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RatingServiceServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rating.RatingService/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RatingServiceServer).Delete(ctx, req.(*DeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RatingService_ServiceDesc is the grpc.ServiceDesc for RatingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -314,6 +346,10 @@ var RatingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RateAlbum",
 			Handler:    _RatingService_RateAlbum_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _RatingService_Delete_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

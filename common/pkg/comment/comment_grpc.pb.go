@@ -28,6 +28,7 @@ type CommentsClient interface {
 	DeleteComment(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*CommentResponse, error)
 	GetByReview(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
 	GetAllByReportCount(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
+	GetByUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error)
 }
 
 type commentsClient struct {
@@ -92,6 +93,15 @@ func (c *commentsClient) GetAllByReportCount(ctx context.Context, in *IdRequest,
 	return out, nil
 }
 
+func (c *commentsClient) GetByUser(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*AllCommentsResponse, error) {
+	out := new(AllCommentsResponse)
+	err := c.cc.Invoke(ctx, "/comment.Comments/GetByUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CommentsServer is the server API for Comments service.
 // All implementations must embed UnimplementedCommentsServer
 // for forward compatibility
@@ -102,6 +112,7 @@ type CommentsServer interface {
 	DeleteComment(context.Context, *IdRequest) (*CommentResponse, error)
 	GetByReview(context.Context, *IdRequest) (*AllCommentsResponse, error)
 	GetAllByReportCount(context.Context, *IdRequest) (*AllCommentsResponse, error)
+	GetByUser(context.Context, *IdRequest) (*AllCommentsResponse, error)
 	mustEmbedUnimplementedCommentsServer()
 }
 
@@ -126,6 +137,9 @@ func (UnimplementedCommentsServer) GetByReview(context.Context, *IdRequest) (*Al
 }
 func (UnimplementedCommentsServer) GetAllByReportCount(context.Context, *IdRequest) (*AllCommentsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllByReportCount not implemented")
+}
+func (UnimplementedCommentsServer) GetByUser(context.Context, *IdRequest) (*AllCommentsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetByUser not implemented")
 }
 func (UnimplementedCommentsServer) mustEmbedUnimplementedCommentsServer() {}
 
@@ -248,6 +262,24 @@ func _Comments_GetAllByReportCount_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Comments_GetByUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommentsServer).GetByUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/comment.Comments/GetByUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommentsServer).GetByUser(ctx, req.(*IdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Comments_ServiceDesc is the grpc.ServiceDesc for Comments service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +310,10 @@ var Comments_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllByReportCount",
 			Handler:    _Comments_GetAllByReportCount_Handler,
+		},
+		{
+			MethodName: "GetByUser",
+			Handler:    _Comments_GetByUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

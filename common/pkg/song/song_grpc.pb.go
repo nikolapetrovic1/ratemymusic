@@ -22,6 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SongServiceClient interface {
+	StreamSong(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (SongService_StreamSongClient, error)
 	FindOne(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (*FindOneResponse, error)
 	FindByMusician(ctx context.Context, in *FindByMusicianRequest, opts ...grpc.CallOption) (*FindByMusicianResponse, error)
 	FindByAlbum(ctx context.Context, in *IdRequest, opts ...grpc.CallOption) (*FindByMusicianResponse, error)
@@ -37,6 +38,38 @@ type songServiceClient struct {
 
 func NewSongServiceClient(cc grpc.ClientConnInterface) SongServiceClient {
 	return &songServiceClient{cc}
+}
+
+func (c *songServiceClient) StreamSong(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (SongService_StreamSongClient, error) {
+	stream, err := c.cc.NewStream(ctx, &SongService_ServiceDesc.Streams[0], "/song.SongService/StreamSong", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &songServiceStreamSongClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type SongService_StreamSongClient interface {
+	Recv() (*AudioSample, error)
+	grpc.ClientStream
+}
+
+type songServiceStreamSongClient struct {
+	grpc.ClientStream
+}
+
+func (x *songServiceStreamSongClient) Recv() (*AudioSample, error) {
+	m := new(AudioSample)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 func (c *songServiceClient) FindOne(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (*FindOneResponse, error) {
@@ -106,6 +139,7 @@ func (c *songServiceClient) SearchSong(ctx context.Context, in *SearchRequest, o
 // All implementations must embed UnimplementedSongServiceServer
 // for forward compatibility
 type SongServiceServer interface {
+	StreamSong(*FindOneRequest, SongService_StreamSongServer) error
 	FindOne(context.Context, *FindOneRequest) (*FindOneResponse, error)
 	FindByMusician(context.Context, *FindByMusicianRequest) (*FindByMusicianResponse, error)
 	FindByAlbum(context.Context, *IdRequest) (*FindByMusicianResponse, error)
@@ -120,6 +154,9 @@ type SongServiceServer interface {
 type UnimplementedSongServiceServer struct {
 }
 
+func (UnimplementedSongServiceServer) StreamSong(*FindOneRequest, SongService_StreamSongServer) error {
+	return status.Errorf(codes.Unimplemented, "method StreamSong not implemented")
+}
 func (UnimplementedSongServiceServer) FindOne(context.Context, *FindOneRequest) (*FindOneResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method FindOne not implemented")
 }
@@ -152,6 +189,27 @@ type UnsafeSongServiceServer interface {
 
 func RegisterSongServiceServer(s grpc.ServiceRegistrar, srv SongServiceServer) {
 	s.RegisterService(&SongService_ServiceDesc, srv)
+}
+
+func _SongService_StreamSong_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(FindOneRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SongServiceServer).StreamSong(m, &songServiceStreamSongServer{stream})
+}
+
+type SongService_StreamSongServer interface {
+	Send(*AudioSample) error
+	grpc.ServerStream
+}
+
+type songServiceStreamSongServer struct {
+	grpc.ServerStream
+}
+
+func (x *songServiceStreamSongServer) Send(m *AudioSample) error {
+	return x.ServerStream.SendMsg(m)
 }
 
 func _SongService_FindOne_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -316,6 +374,12 @@ var SongService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _SongService_SearchSong_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "StreamSong",
+			Handler:       _SongService_StreamSong_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "pkg/song/song.proto",
 }

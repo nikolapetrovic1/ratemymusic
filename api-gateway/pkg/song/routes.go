@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient) {
-	//a := auth.InitAuthMiddleware(authSvc)
+	a := auth.InitAuthMiddleware(authSvc)
 
 	svc := &ServiceClient{
 		Client: InitServiceClient(c),
@@ -20,10 +20,16 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.GET("/musician/:id", svc.FindByMusician)
 	routes.GET("/album/:id", svc.FindByAlbum)
 	routes.GET("/search", svc.Search)
-	routes.POST("/", svc.CreateSong)
-	routes.PUT("/", svc.UpdateSong)
-	routes.DELETE("/:id", svc.DeleteSong)
-
+	routes.POST("/", func(c *gin.Context) {
+		a.AuthRequired(c, []string{"MODERATOR"})
+	}, svc.CreateSong)
+	routes.PUT("/", func(c *gin.Context) {
+		a.AuthRequired(c, []string{"MODERATOR"})
+	}, svc.UpdateSong)
+	routes.DELETE("/:id", func(c *gin.Context) {
+		a.AuthRequired(c, []string{"MODERATOR"})
+	}, svc.DeleteSong)
+	routes.GET("/stream/:id", svc.Stream)
 	//routes.Use(a.AuthRequired)
 	//routes.GET("/:id", func(c *gin.Context) {
 	//	a.AuthRequired(c, []string{"USER"})
@@ -53,4 +59,7 @@ func (svc *ServiceClient) DeleteSong(ctx *gin.Context) {
 }
 func (svc *ServiceClient) Search(ctx *gin.Context) {
 	routes.Search(ctx, svc.Client)
+}
+func (svc *ServiceClient) Stream(ctx *gin.Context) {
+	routes.Stream(ctx, svc.Client)
 }

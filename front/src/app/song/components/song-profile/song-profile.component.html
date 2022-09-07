@@ -1,13 +1,17 @@
-<div class="containter" *ngIf="song && musician">
+<app-song-player [songId]="songId"></app-song-player>
+<div class="containter" *ngIf="song">
     <div class="item">
         <h2> <a href="/musician/{{musician.id}}">{{musician.name}}</a> - {{song.name}}</h2>
+
         <div class="rating">
-            <p>Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
+            <p *ngIf="isLoggedIn()" >Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
 
                     <ng-template let-fill="fill" let-index="index">
                         <span class="star" [class.filled]="fill === 100">&#9733;</span>
                     </ng-template>
-                </ngb-rating> ({{ratingValue.value}}/10)</p>
+                </ngb-rating> ({{ratingValue.value}}/10)
+            
+            </p>
         </div>
         <div class="ratings">
             <p>Average rating: <b>{{averageRating}}</b></p>

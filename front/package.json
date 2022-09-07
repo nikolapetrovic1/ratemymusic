@@ -27,6 +27,7 @@
     "angular-star-rating": "^6.0.0",
     "bootstrap": "^5.2.0",
     "rxjs": "~7.5.0",
+    "soundcloud-key-fetch": "^1.0.11",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

@@ -39,8 +39,13 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.POST("song", func(c *gin.Context) {
 		a.AuthRequired(c, []string{"USER"})
 	}, svc.RateSong)
+	routes.GET("user/:id", svc.FindByUserParam)
+	routes.DELETE("/:id/:type", svc.Delete)
 }
 
+func (svc *ServiceClient) FindByUserParam(ctx *gin.Context) {
+	routes.FindByUserParam(ctx, svc.Client)
+}
 func (svc *ServiceClient) FindByUser(ctx *gin.Context) {
 	routes.FindByUser(ctx, svc.Client)
 }
@@ -61,4 +66,8 @@ func (svc *ServiceClient) RateAlbum(ctx *gin.Context) {
 }
 func (svc *ServiceClient) RateSong(ctx *gin.Context) {
 	routes.RateSong(ctx, svc.Client)
+}
+
+func (svc *ServiceClient) Delete(ctx *gin.Context) {
+	routes.Delete(ctx, svc.Client)
 }

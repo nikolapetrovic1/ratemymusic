@@ -59,3 +59,21 @@ func (s *Server) CreateAlbum(context context.Context, request *pb.AlbumData) (*p
 		Status: http.StatusCreated,
 	}, nil
 }
+
+func (s *Server) Update(context context.Context, request *pb.AlbumData) (*pb.BasicResponse, error) {
+	var album models.Album
+	album = utils.MapAlbumDataToAlbum(request)
+
+	s.Repo.DB.Save(&album)
+	return &pb.BasicResponse{
+		Status: http.StatusCreated,
+	}, nil
+}
+
+func (s *Server) Delete(context context.Context, request *pb.IDRequest) (*pb.BasicResponse, error) {
+
+	s.Repo.DB.Delete(&models.Album{}, request.Id)
+	return &pb.BasicResponse{
+		Status: http.StatusCreated,
+	}, nil
+}

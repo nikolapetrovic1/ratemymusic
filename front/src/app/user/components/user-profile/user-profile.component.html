@@ -2,8 +2,13 @@
 <div class="containter">
 
 
-
-    <p>user-profile works!</p>
-
-
+<div class="content">
+    <h2>{{user.email}}</h2>
+    <h3>Comments</h3>
+    <p *ngFor="let comment of comments">{{comment.comment}}</p>
+    <h3>Reviews</h3>
+    <p *ngFor="let review of reviews">{{review.text}} </p>
+</div>
+    <!-- <h3>Ratings</h3>
+    {{ratings|json}} -->
 </div>

@@ -11,6 +11,7 @@ service Comments{
     rpc DeleteComment(IdRequest) returns (CommentResponse) {};
     rpc GetByReview(IdRequest) returns (AllCommentsResponse) {};
     rpc GetAllByReportCount(IdRequest) returns (AllCommentsResponse) {}
+    rpc GetByUser(IdRequest) returns (AllCommentsResponse) {}
 }
 message IdRequest{
     int32 id = 1;
