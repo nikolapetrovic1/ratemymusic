@@ -30,12 +30,12 @@ Mogucnost pregleda novih i popularnih muzicara, albuma i pesama. Korisnici takod
 
 # Arhitektura sistema
 * API gateway - Tehnologija: Go
-* Korisnički mirkoservis - Za rukuvanje korisnicima - Go, PostgreSQL 
+* Korisnički mikroservis - Za rukovanje korisnicima - Go, PostgreSQL 
 * Mikroservis za rukovanje muzicarima repozitorijumima - Go, PostgreSQL 
 * Mikroservis za rukovanje pesmama repozitorijumima - Go, PostgreSQL 
 * Mikroservis za rukovanje albumima repozitorijumima - Go,PostgreSQL 
-* Mikroservis za rukovanje recenzijama i ocenama - Rust,PostgreSQL 
-* Mikroservis za rukovanje komentarima - Go,PostgreSQL 
+* Mikroservis za rukovanje recenzijama i ocenama - Go,PostgreSQL 
+* Mikroservis za rukovanje komentarima - Rust,PostgreSQL 
 * Mikroservis za komunikaciju sa streaming plaformama (Soundcloud ili Spotify) za slusanje muzike - Go ili Python
 * Veb interfejs - TypeScript, Angular
 
