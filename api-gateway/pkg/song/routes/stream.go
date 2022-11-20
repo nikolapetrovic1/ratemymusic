@@ -2,6 +2,7 @@ package routes
 
 import (
 	"context"
+	b64 "encoding/base64"
 	"github.com/gin-gonic/gin"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
 	"net/http"
@@ -19,16 +20,12 @@ func Stream(ctx *gin.Context, c pb.SongServiceClient) {
 	stream, err := c.StreamSong(context.Background(), &pb.FindOneRequest{
 		Id: id,
 	})
-	value, err := stream.Recv()
 	if err != nil {
+		println(err)
 		ctx.AbortWithError(http.StatusBadGateway, err)
 		return
 	}
 
-	ctx.Header("Content-Type", "audio/mpeg")
-	//ctx.Header("Content-Disposition", `attachment;filename="music.mp3"`)
-
-	//ctx.Header("Content-Type", "image/png")
-	//ctx.Header("Content-Disposition", `attachment;filename="img.png"`)
-	ctx.Data(http.StatusOK, "application/octet-stream", value.Data)
+	encodedStream := b64.StdEncoding.EncodeToString(stream.Data)
+	ctx.JSON(http.StatusOK, &encodedStream)
 }

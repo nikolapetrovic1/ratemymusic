@@ -1,6 +1,6 @@
 
 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="registerForm">
-    <h2>Register</h2>
+    <h2 style="text-align: center;">Register</h2>
     <mat-form-field appearance="outline">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" />
@@ -19,4 +19,5 @@
       >
         Register
       </button>
+      <p>Have a account? <a href="/login">Login</a></p>
   </form>

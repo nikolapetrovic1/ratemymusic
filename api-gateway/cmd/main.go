@@ -5,6 +5,7 @@ import (
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/album"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/auth"
+	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/collection"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/comment"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/config"
 	"github.com/nikolapetrovic1/ratemymusic/api-gateway/pkg/musician"
@@ -31,6 +32,7 @@ func main() {
 	comment.RegisterRoutes(r, &c, &authSvc)
 	review.RegisterRoutes(r, &c, &authSvc)
 	album.RegisterRoutes(r, &c, &authSvc)
+	collection.RegisterRoutes(r, &c, &authSvc)
 	err = r.Run(c.Port)
 	if err != nil {
 		return

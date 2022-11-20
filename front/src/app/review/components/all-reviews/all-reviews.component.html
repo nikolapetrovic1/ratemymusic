@@ -1,9 +1,10 @@
 <div class="container">
-
+    <hr>
+    <h2>Write your review</h2>
     <app-review [id]="id" [type]="type" (submitEvent)="loadReviews()">
     </app-review>
 
-
+    <h2><b>Reviews</b></h2>
 <div *ngFor="let review of reviews" class="review">
     
     <app-review-view [review] = "review"> </app-review-view>

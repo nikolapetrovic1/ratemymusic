@@ -10,6 +10,5 @@
 
   <div class="content" *ngIf="albums">
     <app-album-card *ngFor="let album of albums" class="item" [album]="album"></app-album-card>
-    {{albums|json}}
   </div>
 </div>

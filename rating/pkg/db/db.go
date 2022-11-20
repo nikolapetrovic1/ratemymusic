@@ -18,6 +18,6 @@ func Init(url string) Handler {
 		log.Fatalln(err)
 	}
 
-	db.AutoMigrate(&models.SongRating{}, &models.AlbumRating{})
+	db.AutoMigrate(&models.SongRating{}, &models.AlbumRating{}, &models.Rating{})
 	return Handler{db}
 }

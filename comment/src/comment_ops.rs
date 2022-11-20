@@ -21,6 +21,7 @@ pub fn create_comment(comment_req: CommentRequest) {
         .values(&new_comment)
         .execute(&connection)
         .expect("Error saving new comment");
+
 }
 
 pub fn update_comment(comment_req: CommentRequest){
@@ -83,10 +84,9 @@ pub fn get_all_by_report_count() -> Vec<Comment>{
     return results;
 }
 
-pub fn get_by_user(id_value:i32) -> Vec<Comment> {
+pub fn get_by_user(connection: PgConnection, id_value:i32) -> Vec<Comment> {
+    
     use crate::schema::comments::dsl::*;
-
-    let connection = establish_connection();
 
     let results = comments.filter(user_id.eq(id_value))
     .load::<Comment>(&connection)

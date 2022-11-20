@@ -35,7 +35,7 @@ func main() {
 		MusicianSvc: musicianSvc,
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(grpc.MaxRecvMsgSize(1024 * 1024 * 20))
 
 	pb.RegisterSongServiceServer(grpcServer, &s)
 	if err := grpcServer.Serve(lis); err != nil {

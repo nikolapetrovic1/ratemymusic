@@ -15,14 +15,14 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	}
 
 	routes := r.Group("/song")
-
 	routes.GET("/:id", svc.FindOne)
 	routes.GET("/musician/:id", svc.FindByMusician)
 	routes.GET("/album/:id", svc.FindByAlbum)
 	routes.GET("/search", svc.Search)
-	routes.POST("/", func(c *gin.Context) {
-		a.AuthRequired(c, []string{"MODERATOR"})
-	}, svc.CreateSong)
+	routes.POST("/",
+		func(c *gin.Context) {
+			a.AuthRequired(c, []string{"MODERATOR"})
+		}, svc.CreateSong)
 	routes.PUT("/", func(c *gin.Context) {
 		a.AuthRequired(c, []string{"MODERATOR"})
 	}, svc.UpdateSong)
@@ -30,10 +30,6 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 		a.AuthRequired(c, []string{"MODERATOR"})
 	}, svc.DeleteSong)
 	routes.GET("/stream/:id", svc.Stream)
-	//routes.Use(a.AuthRequired)
-	//routes.GET("/:id", func(c *gin.Context) {
-	//	a.AuthRequired(c, []string{"USER"})
-	//}, svc.FindOne)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {

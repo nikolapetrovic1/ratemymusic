@@ -13,6 +13,7 @@ service RatingService {
   rpc FindByUserAlbum(UserAlbumRequest) returns (RatingData) {}
   rpc RateSong(RateRequest) returns (RateResponse){}
   rpc RateAlbum(RateRequest) returns (RateResponse){}
+  rpc Rate(NewRateRequest) returns (RateResponse){}
   rpc Delete(DeleteRequest) returns (RatingResponse) {}
 }
 message DeleteRequest{
@@ -28,8 +29,14 @@ message UserAlbumRequest{
   int64 album_id = 2;
 
 }
+message NewRateRequest{
+  float rating_value = 1;
+  int64 user_id = 2;
+  int64 kind_id = 3;
+  string kind = 4;
+  int64 id = 5;
+}
 message RateRequest{
-
   float rating_value = 1;
   int64 user_id = 2;
   oneof rating_type{

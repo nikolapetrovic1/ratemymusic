@@ -1,0 +1,39 @@
+.toggle-button-switch{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    border-style: solid;
+    gap: 5px;
+    border-color: #1892BF;
+    color:  #1892BF;
+    background-color: transparent;
+    cursor: pointer;
+    user-select: none;  
+    width: 100;
+    border-radius: 3px;
+    font-size: larger;
+    width: 115px;
+}
+
+.icon{
+    align-self: flex-start;
+    margin-left: 10px;
+}
+input[type="checkbox"] {
+    display: none; 
+
+}
+
+input[type=checkbox]:checked ~ .toggle-button-switch{
+    background: #1892BF;
+    color: #FFF;
+
+}
+
+
+
+input[type=checkbox]:checked ~ mat-icon{ 
+    background-color: red;
+}

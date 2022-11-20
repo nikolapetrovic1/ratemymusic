@@ -11,8 +11,7 @@ export class RatingService {
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
 
-  constructor(private http: HttpClient) {
-   }
+  constructor(private http: HttpClient) {}
 
    rate(rating:any,type:any): Observable<any> {
     return this.http.post<any>(`http://localhost:3000/rating/${type}`, rating, {

@@ -5,6 +5,7 @@ package comment;
 option go_package = "./pkg/pb";
 
 service Comments{
+
     rpc CreateComment(CommentRequest) returns (CommentResponse) {};
     rpc UpdateComment(CommentRequest) returns (CommentResponse) {};
     rpc ReportComment(ReportRequest) returns (CommentResponse) {};

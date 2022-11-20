@@ -1,21 +1,21 @@
 <mat-toolbar color="primary">
 
 
-    <span>My App</span>
+    <span href="/">RateMyMusic</span>
     <span class="example-spacer"></span>
     <div class="routes">
-    <a href="/musician">
-      Musicians 
-    </a>
-    <a href="/song">
+      <button mat-flat-button color = "primary"  class="header-button" (click)="navigate('musician')">
+        Musician 
+      </button>
+    <button mat-flat-button color = "primary" class="header-button" (click)="navigate('song')">
       Songs 
-    </a>
-    <a href="/album">
-      Albums 
-    </a>
-    <button mat-raised-button color = "primary" (click)="logout()" *ngIf="loggedIn">logout
     </button>
-    <button mat-raised-button color = "primary" (click)="logout()" *ngIf="!loggedIn">
+    <button mat-flat-button color = "primary" class="header-button" (click)="navigate('album')">
+      Albums 
+    </button>
+    <button mat-flat-button color = "primary" class="header-button" (click)="logout()" *ngIf="loggedIn">logout
+    </button>
+    <button mat-flat-button color = "primary" class="header-button" (click)="logout()" *ngIf="!loggedIn">
       login
     </button>
   </div>

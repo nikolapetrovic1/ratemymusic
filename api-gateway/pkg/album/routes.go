@@ -16,7 +16,6 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 
 	routes := r.Group("/album")
 
-	//routes.GET("/:id", svc.FindOne)
 	routes.GET("/musician/:id", svc.FindByMusician)
 	routes.GET("/:id", svc.FindById)
 	routes.GET("/search", svc.Search)

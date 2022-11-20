@@ -6,7 +6,7 @@ option go_package = "./pkg/pb";
 
 
 service SongService{
-  rpc StreamSong(FindOneRequest) returns (stream AudioSample);
+  rpc StreamSong(FindOneRequest) returns (AudioSample);
   rpc FindOne(FindOneRequest) returns (FindOneResponse) {}
   rpc FindByMusician(FindByMusicianRequest) returns (FindByMusicianResponse) {}
   rpc FindByAlbum(IdRequest) returns (FindByMusicianResponse) {}
@@ -17,8 +17,7 @@ service SongService{
 }
 
 message AudioSample {
-  string Timestamp = 1;
-  bytes Data = 2;
+  bytes Data = 1;
 }
 
 message Genre{

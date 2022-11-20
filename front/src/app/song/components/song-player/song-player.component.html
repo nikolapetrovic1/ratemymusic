@@ -1,6 +1,11 @@
+<div *ngIf="song">
+  <audio controls *ngIf="song" [src]="song" >
+    Your browser does not support the audio element.
+    </audio>
+</div>
+<div *ngIf="!song">
+  <mat-spinner class="spinner" ></mat-spinner>
+  <p>Loading audio..</p>
+</div>
 
-<audio controls>
-    <source src="http://localhost:3000/song/stream/{{songId}}" type="audio/mpeg">
-  Your browser does not support the audio element.
-  </audio>
 

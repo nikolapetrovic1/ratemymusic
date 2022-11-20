@@ -12,8 +12,8 @@ type ServiceClient struct {
 }
 
 func InitServiceClient(c *config.Config) pb.SongServiceClient {
-	// using WithInsecure() because no SSL running
-	cc, err := grpc.Dial(c.SongSvcUrl, grpc.WithInsecure())
+
+	cc, err := grpc.Dial(c.SongSvcUrl, grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.MaxCallRecvMsgSize(1024*1024*20)))
 
 	if err != nil {
 		fmt.Println("Could not connect:", err)

@@ -1,24 +1,27 @@
-<app-song-player [songId]="songId"></app-song-player>
 <div class="containter" *ngIf="song">
     <div class="item">
+        <div class="header">
         <h2> <a href="/musician/{{musician.id}}">{{musician.name}}</a> - {{song.name}}</h2>
+        <app-favorite-button kind="song" [kindId]="songId" [name]="song.name">    
+        </app-favorite-button>
+    </div>
+        <app-song-player [songId]="songId"></app-song-player>
 
         <div class="rating">
-            <p *ngIf="isLoggedIn()" >Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
+            <p *ngIf="isLoggedIn()">Your Rating : <ngb-rating [formControl]="ratingValue" (click)="rateSong()">
 
                     <ng-template let-fill="fill" let-index="index">
                         <span class="star" [class.filled]="fill === 100">&#9733;</span>
                     </ng-template>
                 </ngb-rating> ({{ratingValue.value}}/10)
-            
+
             </p>
         </div>
         <div class="ratings">
             <p>Average rating: <b>{{averageRating}}</b></p>
         </div>
         <div class="review">
-            <!-- <app-review type="song" [id]="songId"></app-review> -->
-            <h3>Reviews</h3>
+
             <app-all-reviews [id]="songId" type="song"></app-all-reviews>
         </div>
     </div>

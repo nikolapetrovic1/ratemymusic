@@ -29,6 +29,7 @@ type RatingServiceClient interface {
 	FindByUserAlbum(ctx context.Context, in *UserAlbumRequest, opts ...grpc.CallOption) (*RatingData, error)
 	RateSong(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
 	RateAlbum(ctx context.Context, in *RateRequest, opts ...grpc.CallOption) (*RateResponse, error)
+	Rate(ctx context.Context, in *NewRateRequest, opts ...grpc.CallOption) (*RateResponse, error)
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*RatingResponse, error)
 }
 
@@ -103,6 +104,15 @@ func (c *ratingServiceClient) RateAlbum(ctx context.Context, in *RateRequest, op
 	return out, nil
 }
 
+func (c *ratingServiceClient) Rate(ctx context.Context, in *NewRateRequest, opts ...grpc.CallOption) (*RateResponse, error) {
+	out := new(RateResponse)
+	err := c.cc.Invoke(ctx, "/rating.RatingService/Rate", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *ratingServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*RatingResponse, error) {
 	out := new(RatingResponse)
 	err := c.cc.Invoke(ctx, "/rating.RatingService/Delete", in, out, opts...)
@@ -123,6 +133,7 @@ type RatingServiceServer interface {
 	FindByUserAlbum(context.Context, *UserAlbumRequest) (*RatingData, error)
 	RateSong(context.Context, *RateRequest) (*RateResponse, error)
 	RateAlbum(context.Context, *RateRequest) (*RateResponse, error)
+	Rate(context.Context, *NewRateRequest) (*RateResponse, error)
 	Delete(context.Context, *DeleteRequest) (*RatingResponse, error)
 	mustEmbedUnimplementedRatingServiceServer()
 }
@@ -151,6 +162,9 @@ func (UnimplementedRatingServiceServer) RateSong(context.Context, *RateRequest) 
 }
 func (UnimplementedRatingServiceServer) RateAlbum(context.Context, *RateRequest) (*RateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RateAlbum not implemented")
+}
+func (UnimplementedRatingServiceServer) Rate(context.Context, *NewRateRequest) (*RateResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Rate not implemented")
 }
 func (UnimplementedRatingServiceServer) Delete(context.Context, *DeleteRequest) (*RatingResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
@@ -294,6 +308,24 @@ func _RatingService_RateAlbum_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RatingService_Rate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewRateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RatingServiceServer).Rate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/rating.RatingService/Rate",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RatingServiceServer).Rate(ctx, req.(*NewRateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _RatingService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
@@ -346,6 +378,10 @@ var RatingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RateAlbum",
 			Handler:    _RatingService_RateAlbum_Handler,
+		},
+		{
+			MethodName: "Rate",
+			Handler:    _RatingService_Rate_Handler,
 		},
 		{
 			MethodName: "Delete",

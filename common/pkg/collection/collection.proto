@@ -1,0 +1,56 @@
+syntax ="proto3";
+
+package collection;
+
+option go_package = "./pkg/pb";
+
+service CollectionService {
+  rpc GetByUserId(IdRequest) returns (BasicResponse) {};
+  rpc GetByUserIdKind(KindRequest) returns (BasicResponse) {};
+  rpc GetByUserIdKindId(KindIdRequest) returns (KindIdResponse) {};
+  rpc AddToFavorite(FavoriteData) returns (AddToFavoriteResponse) {};
+  rpc RemoveFavorite(DeleteRequest) returns (DeleteResponse) {};
+}
+
+message AddToFavoriteResponse{
+  int64 status = 1;
+  string error = 2;
+}
+
+message FavoriteData{
+  int64 id = 3;
+  int64 userId = 4;
+  string kind = 5;
+  int64 kindId = 6;
+  string name = 7;
+  bool favorite = 8;
+}
+message BasicResponse{
+  int64 status = 1;
+  string error = 2;
+  repeated FavoriteData favorites = 3;
+}
+message IdRequest{
+  int64 id = 1;
+}
+message KindRequest{
+  int64 id = 1;
+  string kind = 2;
+}
+message KindIdRequest{
+  int64 id = 1;
+  string kind = 2;
+  int64 kindId = 3;
+}
+message KindIdResponse {
+  int64 status = 1;
+  string error = 2;
+  FavoriteData favorite = 3;
+}
+message DeleteRequest{
+  int64 id = 1;
+  int64 userId = 2;
+}
+message DeleteResponse {
+  string info = 1;
+}

@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"errors"
 	pb "github.com/nikolapetrovic1/ratemymusic/common/pkg/song"
 	"github.com/nikolapetrovic1/ratemymusic/song/client"
 	"github.com/nikolapetrovic1/ratemymusic/song/pkg/db"
@@ -12,24 +13,24 @@ import (
 )
 
 type Server struct {
-	pb.UnimplementedSongServiceServer
 	Repo        db.Handler
 	MusicianSvc client.MusicianServiceClient
+	pb.UnimplementedSongServiceServer
 }
 
-func (s *Server) StreamSong(request *pb.FindOneRequest, stream pb.SongService_StreamSongServer) error {
+func (s *Server) StreamSong(_ context.Context, request *pb.FindOneRequest) (*pb.AudioSample, error) {
 	var song models.Song
-	s.Repo.DB.First(&song, request.Id)
+	if result := s.Repo.DB.First(&song, request.Id); result.Error != nil {
+		return &pb.AudioSample{
+			Data: nil,
+		}, errors.New("song does not exist")
+	}
 
-	sample := &pb.AudioSample{
-		Timestamp: "",
-		Data:      utils.LoadAudio(song.Audio),
-	}
-	if err := stream.SendMsg(sample); err != nil {
-		return err
-	}
-	return nil
+	return &pb.AudioSample{
+		Data: utils.LoadAudio(song.Audio),
+	}, nil
 }
+
 func (s *Server) FindOne(_ context.Context, request *pb.FindOneRequest) (*pb.FindOneResponse, error) {
 	var song models.Song
 
@@ -101,7 +102,7 @@ func (s *Server) DeleteSong(_ context.Context, deleteRequest *pb.DeleteSongReque
 func (s *Server) SearchSong(_ context.Context, request *pb.SearchRequest) (*pb.FindAllResponse, error) {
 	return &pb.FindAllResponse{
 		Status: http.StatusOK,
-		Songs:  utils.MapListSongResponse(s.Repo.SearchSongs(request.Query)),
+		Songs:  utils.MapListSongResponse(s.Repo.SearchSongs(request.Query, "Hip-Hop")),
 	}, nil
 }
 

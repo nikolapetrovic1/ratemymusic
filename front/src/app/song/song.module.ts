@@ -10,6 +10,7 @@ import { NgbRatingModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReviewModule } from '../review/review.module';
 import { CreateSongComponent } from './components/create-song/create-song.component';
 import { SongPlayerComponent } from './components/song-player/song-player.component';
+import { FavoriteButtonComponent } from './components/favorite-button/favorite-button.component';
 @NgModule({
   declarations: [
     AllSongsComponent,
@@ -17,6 +18,7 @@ import { SongPlayerComponent } from './components/song-player/song-player.compon
     SongProfileComponent,
     CreateSongComponent,
     SongPlayerComponent,
+    FavoriteButtonComponent,
     
   ],
   imports: [
@@ -24,8 +26,7 @@ import { SongPlayerComponent } from './components/song-player/song-player.compon
     SongRoutingModule,
     SharedModule,
     NgbRatingModule,
-    ReviewModule
-    
+    ReviewModule,
   ]
 })
 export class SongModule { }

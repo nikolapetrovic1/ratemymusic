@@ -36,21 +36,20 @@ export class SongService {
       `http://localhost:3000/song/${id}`,
     );
   }
-  getByMusician(id:string): Observable<any> {
+  getByMusician(id:number): Observable<any> {
     return this.http.get<HttpResponse<any>>(
       `http://localhost:3000/song/musician/${id}`,
     );
   }
   submit(value: any) {
-    return this.http.post<any>('http://localhost:3000/song/', value, {
+    return this.http.post('http://localhost:3000/song/', value, {
       headers: this.headers,
       responseType: 'json',
     });
   }
-  streamSong(): Observable<any>{
+  streamSong(id:any): Observable<any>{
     return this.http.get<any>(
-      `http://localhost:3000/song/stream`, {
-        headers: this.audio_headers
+      `http://localhost:3000/song/stream/${id}`, {
       }
     );
   }

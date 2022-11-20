@@ -21,10 +21,6 @@ message ReviewResponse {
   string error = 2;
   repeated ReviewData reviews = 3;
 }
-enum DataType{
-  album = 0;
-  song = 1;
-}
 message ReviewData{
   int64 id = 1;
   int64 user_id = 2;

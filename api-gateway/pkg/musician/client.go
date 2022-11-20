@@ -12,7 +12,6 @@ type ServiceClient struct {
 }
 
 func InitServiceClient(c *config.Config) pb.MusicianServiceClient {
-	// using WithInsecure() because no SSL running
 	cc, err := grpc.Dial(c.MusicianSvcUrl, grpc.WithInsecure())
 
 	if err != nil {

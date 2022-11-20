@@ -26,3 +26,14 @@ type AlbumRating struct {
 	UpdatedAt   time.Time      `json:"-"`
 	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
 }
+
+type Rating struct {
+	ID          int64          `json:"id" gorm:"primaryKey"`
+	UserID      int64          `json:"user_id" gorm:"not null"`
+	RatingValue float64        `json:"rating_value" gorm:"not null"`
+	KindID      int64          `json:"album_id" gorm:"not null"`
+	Kind        string         `json:"kind"`
+	CreatedAt   time.Time      `json:"-"`
+	UpdatedAt   time.Time      `json:"-"`
+	DeletedAt   gorm.DeletedAt `gorm:"index" json:"-"`
+}

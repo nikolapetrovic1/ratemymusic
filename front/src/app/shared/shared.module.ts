@@ -14,6 +14,8 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatTableModule} from '@angular/material/table';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -33,7 +35,9 @@ import {MatTableModule} from '@angular/material/table';
     MatIconModule,
     MatAutocompleteModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ],
   exports: [
     HeaderComponent,
@@ -49,7 +53,9 @@ import {MatTableModule} from '@angular/material/table';
     MatIconModule,
     MatAutocompleteModule,
     MatSnackBarModule,
-    MatTableModule
+    MatTableModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule { }

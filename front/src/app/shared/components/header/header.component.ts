@@ -24,5 +24,7 @@ export class HeaderComponent implements OnInit {
   isLoggedIn(){
     this.loggedIn = this.authService.isLoggedIn()
   }
-
+  navigate(location:string){
+    this.router.navigate([`/${location}`])
+  }
 }
